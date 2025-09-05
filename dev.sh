@@ -17,7 +17,7 @@ if [[ -d "$INSTALL_DIR" && -n "$(ls -A "$INSTALL_DIR")" ]]; then
     echo "❌ Aborted by user."
     exit 1
   fi
-  echo "🧹 Cleaning $INSTALL_DIR..."
+  echo "🧹 Cleaning $INSTALL_DIR..." 
   rm -rf "$INSTALL_DIR"
 fi
 

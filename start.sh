@@ -37,25 +37,25 @@ if command -v gsettings &>/dev/null && [[ "${XDG_CURRENT_DESKTOP:-}" == *"GNOME"
   echo "🎨 Configuring GNOME settings..."
   
   # Set dark mode
-  if gsettings writable org.gnome.desktop.interface color-scheme &>/dev/null; then
+  if [[ "$(gsettings writable org.gnome.desktop.interface color-scheme 2>/dev/null)" == "true" ]]; then
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' || true
   fi
   
   # Set accent color to orange
-  if gsettings writable org.gnome.desktop.interface accent-color &>/dev/null; then
+  if [[ "$(gsettings writable org.gnome.desktop.interface accent-color 2>/dev/null)" == "true" ]]; then
     gsettings set org.gnome.desktop.interface accent-color 'orange' || true
   fi
   
   # Set wallpaper
   WALLPAPER_PATH="$INSTALL_DIR/assets/ubuntu-neo-wallpaper.jpg"
   if [ -f "$WALLPAPER_PATH" ]; then
-    if gsettings writable org.gnome.desktop.background picture-uri &>/dev/null; then
+    if [[ "$(gsettings writable org.gnome.desktop.background picture-uri 2>/dev/null)" == "true" ]]; then
       gsettings set org.gnome.desktop.background picture-uri "file://$WALLPAPER_PATH" || true
     fi
-    if gsettings writable org.gnome.desktop.background picture-uri-dark &>/dev/null; then
+    if [[ "$(gsettings writable org.gnome.desktop.background picture-uri-dark 2>/dev/null)" == "true" ]]; then
       gsettings set org.gnome.desktop.background picture-uri-dark "file://$WALLPAPER_PATH" || true
     fi
-    if gsettings writable org.gnome.desktop.background picture-options &>/dev/null; then
+    if [[ "$(gsettings writable org.gnome.desktop.background picture-options 2>/dev/null)" == "true" ]]; then
       gsettings set org.gnome.desktop.background picture-options 'zoom' || true
     fi
     echo "✅ Wallpaper applied: $WALLPAPER_PATH"

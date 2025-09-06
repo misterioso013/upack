@@ -48,6 +48,37 @@ configure_gnome_settings() {
   fi
 }
 
+# Install GNOME extensions and configure them
+install_gnome_extensions() {
+  local install_dir="$1"
+  
+  # Check if we're running GNOME
+  if [[ "${XDG_CURRENT_DESKTOP:-}" != *"GNOME"* && -z "${GNOME_DESKTOP_SESSION_ID:-}" ]]; then
+    echo "ℹ️ GNOME not detected, skipping extensions installation"
+    return 0
+  fi
+  
+  echo "🧩 Do you want to install and configure GNOME extensions?"
+  echo "   This includes: Tactile, Just Perfection, Blur My Shell, Space Bar,"
+  echo "   TopHat, Alphabetical App Grid, and more!"
+  
+  if command -v gum &>/dev/null; then
+    if gum confirm "Install GNOME extensions?"; then
+      bash "$install_dir/install/gnome-extensions.sh"
+    else
+      echo "⏭️ GNOME extensions installation skipped"
+    fi
+  else
+    echo "Install GNOME extensions? (y/N)"
+    read -r answer
+    if [[ $answer =~ ^[Yy]$ ]]; then
+      bash "$install_dir/install/gnome-extensions.sh"
+    else
+      echo "⏭️ GNOME extensions installation skipped"
+    fi
+  fi
+}
+
 # Install and configure the minimalista theme
 install_theme() {
   local install_dir="$1"

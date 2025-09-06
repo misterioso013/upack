@@ -41,5 +41,8 @@ configure_gnome_settings "$INSTALL_DIR"
 # Install theme (optional)
 install_theme "$INSTALL_DIR"
 
+# Install GNOME extensions (optional)
+install_gnome_extensions "$INSTALL_DIR"
+
 # Handle reboot prompt
 handle_reboot_prompt

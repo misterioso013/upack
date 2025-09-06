@@ -1,0 +1,20 @@
+# UPack Alacritty Pane Configuration
+# Used for UPack Manager and other system tools
+
+[general]
+import = [
+    "~/.config/alacritty/theme.toml",
+    "~/.config/alacritty/font.toml",
+    "~/.config/alacritty/shared.toml"
+]
+
+[window]
+opacity = 0.95
+
+[window.padding]
+x = 30
+y = 30
+
+[window.dimensions]
+columns = 120
+lines = 35

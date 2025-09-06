@@ -43,15 +43,11 @@ echo "📦 Installing WhiteSur GTK Theme..."
   
   # GDM theme with custom background
   echo "🔧 Installing GDM theme with custom background..."
-  local bg_path
+  bg_path=""
   if [ -f "$UPACK_DIR/assets/dark-background.png" ]; then
     bg_path="$UPACK_DIR/assets/dark-background.png"
-  elif [ -f "../../../assets/dark-background.png" ]; then
-    bg_path="$(pwd)/../../../assets/dark-background.png"
-  elif [ -f "/home/rosiel/projects/upack/assets/dark-background.png" ]; then
-    bg_path="/home/rosiel/projects/upack/assets/dark-background.png"
-  else
-    bg_path=""
+  elif [ -f "$(dirname "$0")/../assets/dark-background.png" ]; then
+    bg_path="$(dirname "$0")/../assets/dark-background.png"
   fi
   
   if [ -n "$bg_path" ] && [ -f "$bg_path" ]; then

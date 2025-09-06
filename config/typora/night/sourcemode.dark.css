@@ -1,0 +1,126 @@
+/* Dark theme source mode styles for Typora night theme */
+
+.CodeMirror {
+  background-color: var(--background-color);
+  color: var(--font-color);
+  border: none;
+}
+
+.CodeMirror-gutters {
+  background-color: var(--code-bg-color);
+  border-right: 1px solid var(--border-color);
+}
+
+.CodeMirror-linenumber {
+  color: var(--accent-color);
+}
+
+.CodeMirror-cursor {
+  border-left: 1px solid var(--font-color);
+}
+
+.CodeMirror-selected {
+  background-color: var(--select-text-bg-color);
+}
+
+.CodeMirror-line::selection,
+.CodeMirror-line > span::selection,
+.CodeMirror-line > span > span::selection {
+  background-color: var(--select-text-bg-color);
+}
+
+.cm-header {
+  color: var(--header-color);
+  font-weight: bold;
+}
+
+.cm-quote {
+  color: var(--accent-color);
+  font-style: italic;
+}
+
+.cm-keyword {
+  color: #c792ea;
+}
+
+.cm-atom {
+  color: #f07178;
+}
+
+.cm-number {
+  color: #f78c6c;
+}
+
+.cm-def {
+  color: #82aaff;
+}
+
+.cm-variable {
+  color: var(--font-color);
+}
+
+.cm-punctuation {
+  color: var(--font-color);
+}
+
+.cm-property {
+  color: #82aaff;
+}
+
+.cm-operator {
+  color: #89ddff;
+}
+
+.cm-variable-2 {
+  color: #eeffff;
+}
+
+.cm-variable-3 {
+  color: #c792ea;
+}
+
+.cm-comment {
+  color: var(--accent-color);
+  font-style: italic;
+}
+
+.cm-string {
+  color: #c3e88d;
+}
+
+.cm-string-2 {
+  color: #f07178;
+}
+
+.cm-meta {
+  color: #ffcb6b;
+}
+
+.cm-qualifier {
+  color: #c3e88d;
+}
+
+.cm-builtin {
+  color: #ffcb6b;
+}
+
+.cm-bracket {
+  color: #89ddff;
+}
+
+.cm-tag {
+  color: #f07178;
+}
+
+.cm-attribute {
+  color: #ffcb6b;
+}
+
+.cm-hr {
+  color: var(--border-color);
+}
+
+.cm-link {
+  color: var(--link-color);
+  text-decoration: underline;
+}

@@ -5,7 +5,15 @@ set -e
 # Terminal Configuration Menu
 # Allows user to choose which terminal configurations to apply
 
-source "$(dirname "$0")/../utils/gum.sh" 2>/dev/null || true
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
+    # Fallback log functions if gum.sh not available
+    log_step() { echo "🔄 $1"; }
+    log_info() { echo "ℹ️  $1"; }
+    log_success() { echo "✅ $1"; }
+    log_error() { echo "❌ $1"; }
+    log_warning() { echo "⚠️  $1"; }
+}
 
 show_terminal_menu() {
     echo "🎨 UPack Terminal Configuration"
@@ -21,7 +29,24 @@ show_terminal_menu() {
     )
     
     # Let user select which configurations to apply
-    local selected=$(printf "%s\n" "${options[@]}" | gum choose --no-limit --height 10)
+    if command -v gum >/dev/null 2>&1; then
+        local selected=$(printf "%s\n" "${options[@]}" | gum choose --no-limit --height 10)
+    else
+        echo "Interactive selection requires gum. Please select manually:"
+        for i in "${!options[@]}"; do
+            echo "$((i+1)). ${options[i]}"
+        done
+        echo ""
+        read -p "Enter numbers separated by spaces (e.g., 1 3 4): " -a selections
+        
+        local selected=""
+        for selection in "${selections[@]}"; do
+            if [[ "$selection" =~ ^[0-9]+$ ]] && [ "$selection" -ge 1 ] && [ "$selection" -le "${#options[@]}" ]; then
+                selected="$selected${options[$((selection-1))]}\n"
+            fi
+        done
+        selected=$(echo -e "$selected" | sed '/^$/d')
+    fi
     
     if [ -z "$selected" ]; then
         echo "❌ No terminal configurations selected"
@@ -69,14 +94,26 @@ apply_bash_config() {
 
 apply_terminal_apps() {
     echo "📱 Installing terminal applications..."
-    bash "$(dirname "$0")/../../install/apps/optional/terminal-config.sh"
+    # Get UPack directory for absolute path, avoid shadowing global UPACK_DIR
+    local SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local LOCAL_UPACK_DIR="${UPACK_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+    local terminal_script="$LOCAL_UPACK_DIR/install/apps/optional/terminal-config.sh"
+    
+    if [[ -f "$terminal_script" && -x "$terminal_script" ]]; then
+        bash "$terminal_script"
+    else
+        echo "❌ Error: Terminal configuration script not found or not executable at $terminal_script"
+        return 1
+    fi
 }
 
 apply_fonts_only() {
     echo "🔤 Installing terminal fonts..."
     
-    # Source the terminal config script and extract only the font function
-    local terminal_config="$(dirname "$0")/../../install/apps/optional/terminal-config.sh"
+    # Get UPack directory for absolute path, avoid shadowing global UPACK_DIR
+    local SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local LOCAL_UPACK_DIR="${UPACK_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+    local terminal_config="$LOCAL_UPACK_DIR/install/apps/optional/terminal-config.sh"
     if [ -f "$terminal_config" ]; then
         source "$terminal_config"
         configure_terminal_fonts
@@ -120,9 +157,13 @@ show_terminal_preview() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     show_terminal_preview
     echo ""
-    if gum confirm "🎨 Would you like to configure your terminal?"; then
-        show_terminal_menu
+    if [[ "${BASH_SOURCE[0]}" == "${0}" ]] && command -v gum >/dev/null 2>&1; then
+        if gum confirm "🎨 Would you like to configure your terminal?"; then
+            show_terminal_menu
+        else
+            echo "⏭️  Skipping terminal configuration"
+        fi
     else
-        echo "⏭️  Skipping terminal configuration"
+        echo "⏭️  Skipping terminal configuration (gum not available or not main script)"
     fi
 fi

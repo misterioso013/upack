@@ -4,6 +4,7 @@
   --border-color: #ddd; 
   --code-bg-color: #f8f8f8; 
   --font-color: #42464c;
+  --text-color: #42464c; /* Added for autocomplete hints */
   --header-color: #222324;
   --link-color: #2077b2;
   --control-text-color: #667176;

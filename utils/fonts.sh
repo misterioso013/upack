@@ -6,7 +6,8 @@ FONT_DIR="$HOME/.local/share/fonts"
 VSCODE_SETTINGS="$HOME/.config/Code/User/settings.json"
 ALACRITTY_FONT_DIR="$HOME/.config/alacritty"
 ALACRITTY_FONT_FILE="$ALACRITTY_FONT_DIR/font.toml"
-UPACK_DIR="$HOME/.local/share/upack"
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+export UPACK_DIR
 
 # Install SF Pro Display fonts from UPack assets
 install_sf_pro_fonts() {

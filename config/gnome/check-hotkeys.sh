@@ -3,7 +3,15 @@
 # UPack GNOME Hotkeys Checker
 # Shows currently configured keyboard shortcuts
 
-source "$(dirname "$0")/../../utils/gum.sh" 2>/dev/null || true
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
+    # Fallback log functions if gum.sh not available
+    log_step() { echo "🔄 $1"; }
+    log_info() { echo "ℹ️  $1"; }
+    log_success() { echo "✅ $1"; }
+    log_error() { echo "❌ $1"; }
+    log_warning() { echo "⚠️  $1"; }
+} 2>/dev/null || true
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -206,15 +214,24 @@ compare_with_defaults() {
         local current=""
         
         if [[ "$key" == "screensaver" ]]; then
-            current=$(gsettings get org.gnome.settings-daemon.plugins.media-keys "$key" 2>/dev/null | sed "s/\['//g" | sed "s/'\]//g")
+            current=$(gsettings get org.gnome.settings-daemon.plugins.media-keys "$key" 2>/dev/null)
         else
-            current=$(gsettings get org.gnome.desktop.wm.keybindings "$key" 2>/dev/null | sed "s/\['//g" | sed "s/'\]//g")
+            current=$(gsettings get org.gnome.desktop.wm.keybindings "$key" 2>/dev/null)
         fi
         
-        if [ "$current" = "$expected" ]; then
-            echo -e "  ✅ $key: ${GREEN}$current${NC} (matches UPack default)"
+        # Normalize gsettings output into a list and check membership
+        if [[ -n "$current" ]]; then
+            # Remove surrounding brackets and quotes, split on commas
+            local normalized_current=$(echo "$current" | sed 's/^\[//;s/\]$//;s/'\''//g' | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            
+            # Check if expected key is in the normalized list
+            if echo "$normalized_current" | grep -Fxq "$expected"; then
+                echo -e "  ✅ $key: ${GREEN}$current${NC} (matches UPack default)"
+            else
+                echo -e "  ⚠️  $key: ${YELLOW}$current${NC} (expected: ${GREEN}$expected${NC})"
+            fi
         else
-            echo -e "  ⚠️  $key: ${YELLOW}$current${NC} (expected: ${GREEN}$expected${NC})"
+            echo -e "  ⚠️  $key: ${YELLOW}(not set)${NC} (expected: ${GREEN}$expected${NC})"
         fi
     done
 }

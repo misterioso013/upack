@@ -3,7 +3,15 @@
 # Apply GNOME extensions configuration from conf file
 # Reads the extensions.conf file and applies settings via gsettings
 
-source "$(dirname "$0")/../../utils/gum.sh" 2>/dev/null || true
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
+    # Fallback log functions if gum.sh not available
+    log_step() { echo "🔄 $1"; }
+    log_info() { echo "ℹ️  $1"; }
+    log_success() { echo "✅ $1"; }
+    log_error() { echo "❌ $1"; }
+    log_warning() { echo "⚠️  $1"; }
+} 2>/dev/null || true
 
 # Define log functions if not already available
 if ! command -v log_step &> /dev/null; then
@@ -46,8 +54,29 @@ apply_extension_configs() {
             local key="${BASH_REMATCH[1]}"
             local value="${BASH_REMATCH[2]}"
             
-            # Remove quotes if present
-            value=$(echo "$value" | sed "s/^'//;s/'$//")
+            # Detect and preserve value types for gsettings
+            local processed_value
+            if [[ "$value" =~ ^(true|false)$ ]]; then
+                # Boolean value - pass as-is
+                processed_value="$value"
+            elif [[ "$value" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+                # Numeric value - pass as-is
+                processed_value="$value"
+            elif [[ "$value" =~ ^\[.*\]$ ]] || [[ "$value" =~ ^\{.*\}$ ]]; then
+                # Array or object - pass as-is
+                processed_value="$value"
+            else
+                # String value - create proper GVariant string literal
+                # Strip outer quotes if present
+                processed_value="${value#\'}"
+                processed_value="${processed_value%\'}"
+                processed_value="${value#\"}"
+                processed_value="${processed_value%\"}"
+                # Escape embedded single quotes using standard shell idiom
+                processed_value="${processed_value//\'/\'\"\'\"\'}"
+                # Wrap in single quotes for GVariant
+                processed_value="'$processed_value'"
+            fi
             
             if [[ -n "$current_section" ]]; then
                 # Build the full schema path - handle dot notation
@@ -62,8 +91,8 @@ apply_extension_configs() {
                 # Check if the schema exists and is writable
                 if gsettings list-schemas | grep -q "^$schema$"; then
                     if gsettings writable "$schema" "$key" 2>/dev/null | grep -q "true"; then
-                        log_info "Setting $schema.$key = $value"
-                        gsettings set "$schema" "$key" "$value" 2>/dev/null || {
+                        log_info "Setting $schema.$key = $processed_value"
+                        gsettings set "$schema" "$key" "$processed_value" 2>/dev/null || {
                             log_error "Failed to set $schema.$key"
                         }
                     else
@@ -81,10 +110,26 @@ apply_extension_configs() {
     
     # Ask if user wants to configure productivity hotkeys
     echo ""
-    if gum confirm "🎯 Would you like to configure productivity hotkeys for GNOME?"; then
-        bash "$(dirname "$0")/hotkeys.sh"
+    # Check if hotkeys should be skipped (CI/headless mode)
+    if [[ "$UPACK_SKIP_HOTKEYS" == "1" ]] || [[ ! -t 0 ]]; then
+        log_info "Hotkeys configuration skipped (non-interactive session or UPACK_SKIP_HOTKEYS=1)"
+    elif command -v gum >/dev/null 2>&1; then
+        if gum confirm "🎯 Would you like to configure productivity hotkeys for GNOME?"; then
+            bash "$(dirname "$0")/hotkeys.sh"
+        else
+            log_info "Hotkeys configuration skipped"
+        fi
     else
-        log_info "Hotkeys configuration skipped"
+        printf "🎯 Would you like to configure productivity hotkeys for GNOME? (y/N): "
+        read -r response
+        case "$response" in
+            [yY]|[yY][eE][sS])
+                bash "$(dirname "$0")/hotkeys.sh"
+                ;;
+            *)
+                log_info "Hotkeys configuration skipped"
+                ;;
+        esac
     fi
 }
 

@@ -1,0 +1,55 @@
+/* Dark theme codeblock styles for Typora night theme */
+
+.md-fences {
+  background-color: var(--code-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.md-fences .cm-header {
+  color: #c792ea;
+}
+
+.md-fences .cm-string {
+  color: #c3e88d;
+}
+
+.md-fences .cm-number {
+  color: #f78c6c;
+}
+
+.md-fences .cm-keyword {
+  color: #c792ea;
+}
+
+.md-fences .cm-comment {
+  color: var(--accent-color);
+}
+
+.md-fences .cm-variable {
+  color: #eeffff;
+}
+
+.md-fences .cm-builtin {
+  color: #ffcb6b;
+}
+
+.md-fences .cm-atom {
+  color: #f07178;
+}
+
+.md-fences .cm-operator {
+  color: #89ddff;
+}
+
+.md-fences .cm-tag {
+  color: #f07178;
+}
+
+.md-fences .cm-attribute {
+  color: #ffcb6b;
+}
+
+.md-fences .cm-property {
+  color: #82aaff;
+}

@@ -30,10 +30,12 @@ fi
 cat assets/banner.txt || true
 
 echo "🚀 Starting Upack..."
-bash core/menu.sh
 
-# Load common functions
-source core/common.sh
+# Load common functions using absolute path
+source "$INSTALL_DIR/core/common.sh"
+
+# Run main menu from install directory
+bash "$INSTALL_DIR/core/menu.sh"
 
 # Configure GNOME settings
 configure_gnome_settings "$INSTALL_DIR"

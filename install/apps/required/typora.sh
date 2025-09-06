@@ -47,6 +47,9 @@ mkdir -p ~/.config/Typora/themes
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 UPACK_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 
+# Ensure themes directory exists
+mkdir -p ~/.config/Typora/themes/
+
 # Copy theme files
 if [ -f "$UPACK_DIR/config/typora/typora.css" ]; then
   cp "$UPACK_DIR/config/typora/typora.css" ~/.config/Typora/themes/
@@ -60,6 +63,14 @@ if [ -f "$UPACK_DIR/config/typora/typora_night.css" ]; then
   echo "✅ Typora dark theme configured"
 else
   echo "⚠️ Typora dark theme file not found"
+fi
+
+# Copy night directory with all assets (CSS partials and cursor images)
+if [ -d "$UPACK_DIR/config/typora/night" ]; then
+  cp -r "$UPACK_DIR/config/typora/night" ~/.config/Typora/themes/
+  echo "✅ Typora night theme assets configured"
+else
+  echo "⚠️ Typora night theme assets directory not found"
 fi
 
 echo "✅ Typora configuration completed."

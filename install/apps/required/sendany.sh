@@ -5,7 +5,7 @@ set -e
 echo "🔍 Checking for existing SendAny installation..."
 
 # Check if SendAny desktop entry already exists
-if [ -f ~/.local/share/applications/SendAny.desktop ]; then
+if [ -f ~/.local/share/applications/sendany.desktop ]; then
   echo "✔️ SendAny is already installed. Skipping installation."
   return 0 2>/dev/null || true
 fi
@@ -28,7 +28,7 @@ UPACK_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 ICON_PATH="$HOME/.local/share/upack/assets/icons/sendany.png"
 
 # Create the desktop entry
-cat <<EOF >~/.local/share/applications/SendAny.desktop
+cat <<EOF >~/.local/share/applications/sendany.desktop
 [Desktop Entry]
 Version=1.0
 Name=SendAny
@@ -44,7 +44,7 @@ NoDisplay=false
 EOF
 
 # Make the desktop entry executable
-chmod +x ~/.local/share/applications/SendAny.desktop
+chmod +x ~/.local/share/applications/sendany.desktop
 
 # Update desktop database to make the app appear in menus
 if command -v update-desktop-database &>/dev/null; then

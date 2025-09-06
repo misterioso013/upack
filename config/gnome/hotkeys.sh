@@ -3,7 +3,15 @@
 # UPack GNOME Hotkeys Configuration
 # Configures productivity-focused keyboard shortcuts for GNOME desktop
 
-source "$(dirname "$0")/../../utils/gum.sh" 2>/dev/null || true
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
+    # Fallback log functions if gum.sh not available
+    log_step() { echo "🔄 $1"; }
+    log_info() { echo "ℹ️  $1"; }
+    log_success() { echo "✅ $1"; }
+    log_error() { echo "❌ $1"; }
+    log_warning() { echo "⚠️  $1"; }
+} 2>/dev/null || true
 
 # Define log functions if not already available
 if ! command -v log_step &> /dev/null; then
@@ -138,6 +146,7 @@ configure_application_switching() {
     
     # Application launcher with Super+Space
     gsettings set org.gnome.desktop.wm.keybindings switch-input-source "@as []"
+    gsettings set org.gnome.shell.keybindings show-run-command "['<Super>space']"
     
     # Show applications overview
     gsettings set org.gnome.shell.keybindings toggle-application-view "['<Super>a']"

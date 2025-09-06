@@ -2,5 +2,5 @@
 
 set -e
 echo "Configuring VSCode..."
-bash config/vscode/config.sh
-bash utils/fonts.sh
+bash "$UPACK_DIR/config/vscode/config.sh"
+bash "$UPACK_DIR/utils/fonts.sh"

@@ -1,0 +1,295 @@
+#!/bin/bash
+
+# UPack TUI - Terminal User Interface
+# Interactive terminal interface for UPack management
+
+UPACK_DIR="$HOME/.local/share/upack"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
+BOLD='\033[1m'
+NC='\033[0m'
+
+show_banner() {
+    clear
+    echo -e "${CYAN}${BOLD}"
+    cat << 'EOF'
+  ██╗   ██╗██████╗  █████╗  ██████╗██╗  ██╗
+  ██║   ██║██╔══██╗██╔══██╗██╔════╝██║ ██╔╝
+  ██║   ██║██████╔╝███████║██║     █████╔╝ 
+  ██║   ██║██╔═══╝ ██╔══██║██║     ██╔═██╗ 
+  ╚██████╔╝██║     ██║  ██║╚██████╗██║  ██╗
+   ╚═════╝ ╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+EOF
+    echo -e "${NC}"
+    echo -e "${BLUE}UPack Interactive Manager${NC}"
+    echo -e "${WHITE}Your Ubuntu productivity environment${NC}"
+    echo ""
+}
+
+show_main_menu() {
+    echo -e "${GREEN}${BOLD}Main Menu:${NC}"
+    echo ""
+    echo -e "  ${CYAN}1.${NC} 📦 Install Applications"
+    echo -e "  ${CYAN}2.${NC} 🔄 Update System"
+    echo -e "  ${CYAN}3.${NC} 📋 List Applications"
+    echo -e "  ${CYAN}4.${NC} ⚙️  Configure System"
+    echo -e "  ${CYAN}5.${NC} 🖥️  System Monitor"
+    echo -e "  ${CYAN}6.${NC} 🏥 System Health Check"
+    echo -e "  ${CYAN}7.${NC} 📊 System Status"
+    echo -e "  ${CYAN}8.${NC} ❓ Help"
+    echo -e "  ${CYAN}q.${NC} 🚪 Quit"
+    echo ""
+}
+
+show_install_menu() {
+    clear
+    show_banner
+    echo -e "${GREEN}${BOLD}Install Applications:${NC}"
+    echo ""
+    echo -e "  ${CYAN}1.${NC} 🛠️  Essential Development Tools"
+    echo -e "  ${CYAN}2.${NC} 🎨 Terminal & Shell Configuration"
+    echo -e "  ${CYAN}3.${NC} 🖼️  Themes & Appearance"
+    echo -e "  ${CYAN}4.${NC} 📊 System Monitoring (btop)"
+    echo -e "  ${CYAN}5.${NC} 💻 Development Tools"
+    echo -e "  ${CYAN}6.${NC} 🎮 Games & Entertainment"
+    echo -e "  ${CYAN}7.${NC} 📱 Communication Apps"
+    echo -e "  ${CYAN}8.${NC} 🔧 Custom Installation"
+    echo -e "  ${CYAN}b.${NC} ⬅️  Back to Main Menu"
+    echo ""
+}
+
+show_config_menu() {
+    clear
+    show_banner
+    echo -e "${GREEN}${BOLD}System Configuration:${NC}"
+    echo ""
+    echo -e "  ${CYAN}1.${NC} 🖥️  Terminal Configuration"
+    echo -e "  ${CYAN}2.${NC} ⌨️  GNOME Hotkeys"
+    echo -e "  ${CYAN}3.${NC} 🎨 Theme Configuration"
+    echo -e "  ${CYAN}4.${NC} 🧩 GNOME Extensions"
+    echo -e "  ${CYAN}5.${NC} 🔧 System Settings"
+    echo -e "  ${CYAN}b.${NC} ⬅️  Back to Main Menu"
+    echo ""
+}
+
+show_system_status() {
+    clear
+    show_banner
+    echo -e "${GREEN}${BOLD}🖥️  System Information:${NC}"
+    echo "  OS: $(lsb_release -d | cut -f2)"
+    echo "  Kernel: $(uname -r)"
+    echo "  Desktop: $XDG_CURRENT_DESKTOP"
+    echo ""
+    
+    echo -e "${GREEN}${BOLD}💾 Storage:${NC}"
+    df -h / | tail -n 1 | awk '{printf "  Root: %s used of %s (%s)\n", $3, $2, $5}'
+    echo ""
+    
+    echo -e "${GREEN}${BOLD}🧠 Memory:${NC}"
+    free -h | awk '/^Mem:/ {printf "  RAM: %s used of %s\n", $3, $2}'
+    echo ""
+    
+    echo -e "${GREEN}Press any key to continue...${NC}"
+    read -n 1
+}
+
+handle_install_menu() {
+    local choice
+    while true; do
+        show_install_menu
+        echo -ne "${YELLOW}Choose an option: ${NC}"
+        read choice
+        
+        case $choice in
+            1)
+                echo -e "${BLUE}Installing essential development tools...${NC}"
+                upack install essential
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            2)
+                echo -e "${BLUE}Configuring terminal...${NC}"
+                upack terminal
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            3)
+                echo -e "${BLUE}Installing themes...${NC}"
+                upack theme
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            4)
+                echo -e "${BLUE}Installing btop system monitor...${NC}"
+                upack install btop
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            5)
+                echo -e "${BLUE}Installing development tools...${NC}"
+                upack install vscode
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            6)
+                echo -e "${BLUE}Installing games and entertainment...${NC}"
+                echo "Available: discord, obs-studio, vlc"
+                echo -ne "${YELLOW}Enter app names (space-separated): ${NC}"
+                read apps
+                upack install $apps
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            7)
+                echo -e "${BLUE}Installing communication apps...${NC}"
+                upack install discord
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            8)
+                echo -ne "${YELLOW}Enter application names (space-separated): ${NC}"
+                read apps
+                if [ -n "$apps" ]; then
+                    upack install $apps
+                    echo -e "${GREEN}Press any key to continue...${NC}"
+                    read -n 1
+                fi
+                ;;
+            b|B)
+                return
+                ;;
+            *)
+                echo -e "${RED}Invalid option. Please try again.${NC}"
+                sleep 1
+                ;;
+        esac
+    done
+}
+
+handle_config_menu() {
+    local choice
+    while true; do
+        show_config_menu
+        echo -ne "${YELLOW}Choose an option: ${NC}"
+        read choice
+        
+        case $choice in
+            1)
+                upack terminal
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            2)
+                upack hotkeys
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            3)
+                upack theme
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            4)
+                echo -e "${BLUE}Managing GNOME extensions...${NC}"
+                SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+                REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+                bash "$REPO_ROOT/config/gnome/apply-config.sh"
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            5)
+                echo -e "${BLUE}Opening system settings...${NC}"
+                gnome-control-center &
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            b|B)
+                return
+                ;;
+            *)
+                echo -e "${RED}Invalid option. Please try again.${NC}"
+                sleep 1
+                ;;
+        esac
+    done
+}
+
+main_loop() {
+    local choice
+    while true; do
+        show_banner
+        show_main_menu
+        echo -ne "${YELLOW}Choose an option: ${NC}"
+        read choice
+        
+        case $choice in
+            1)
+                handle_install_menu
+                ;;
+            2)
+                echo -e "${BLUE}Updating system...${NC}"
+                upack update
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            3)
+                clear
+                show_banner
+                upack list --installed
+                echo ""
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            4)
+                handle_config_menu
+                ;;
+            5)
+                echo -e "${BLUE}Opening system monitor...${NC}"
+                upack monitor &
+                echo -e "${GREEN}System monitor opened in background.${NC}"
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            6)
+                clear
+                show_banner
+                upack doctor
+                echo ""
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            7)
+                show_system_status
+                ;;
+            8)
+                clear
+                show_banner
+                upack help
+                echo ""
+                echo -e "${GREEN}Press any key to continue...${NC}"
+                read -n 1
+                ;;
+            q|Q)
+                echo -e "${BLUE}Thanks for using UPack! 👋${NC}"
+                exit 0
+                ;;
+            *)
+                echo -e "${RED}Invalid option. Please try again.${NC}"
+                sleep 1
+                ;;
+        esac
+    done
+}
+
+# Initialize UPack directories
+mkdir -p "$UPACK_DIR"/{apps,backups,logs}
+
+# Start the TUI
+main_loop

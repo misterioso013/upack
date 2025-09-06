@@ -3,7 +3,15 @@
 # UPack GNOME Hotkeys Menu
 # Interactive menu for configuring GNOME productivity hotkeys
 
-source "$(dirname "$0")/../../utils/gum.sh" 2>/dev/null || true
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
+    # Fallback log functions if gum.sh not available
+    log_step() { echo "🔄 $1"; }
+    log_info() { echo "ℹ️  $1"; }
+    log_success() { echo "✅ $1"; }
+    log_error() { echo "❌ $1"; }
+    log_warning() { echo "⚠️  $1"; }
+} 2>/dev/null || true
 
 show_hotkeys_menu() {
     echo "🎯 UPack GNOME Hotkeys Configuration"
@@ -21,7 +29,22 @@ show_hotkeys_menu() {
         "preview            Show hotkey summary without applying"
     )
     
-    local selected=$(printf "%s\n" "${options[@]}" | gum choose --height 12)
+    local selected=""
+    if command -v gum >/dev/null 2>&1; then
+        selected=$(printf "%s\n" "${options[@]}" | gum choose --height 12)
+    else
+        echo "Choose hotkey configuration:"
+        for i in "${!options[@]}"; do
+            echo "$((i+1)). ${options[i]}"
+        done
+        echo ""
+        printf "Enter selection number (1-${#options[@]}): "
+        read -r choice
+        
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#options[@]}" ]; then
+            selected="${options[$((choice-1))]}"
+        fi
+    fi
     
     if [ -z "$selected" ]; then
         echo "❌ No configuration selected"
@@ -60,7 +83,8 @@ show_hotkeys_menu() {
 
 apply_all_hotkeys() {
     echo "🚀 Applying all productivity hotkeys..."
-    bash "$(dirname "$0")/hotkeys.sh"
+    source "$(dirname "$0")/hotkeys.sh"
+    configure_gnome_hotkeys
 }
 
 apply_window_management_only() {

@@ -3,7 +3,15 @@
 # Elegant Bash configuration for UPack
 # Creates a beautiful prompt and useful aliases
 
-source "$(dirname "$0")/../../utils/gum.sh" 2>/dev/null || true
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
+    # Fallback log functions if gum.sh not available
+    log_step() { echo "🔄 $1"; }
+    log_info() { echo "ℹ️  $1"; }
+    log_success() { echo "✅ $1"; }
+    log_error() { echo "❌ $1"; }
+    log_warning() { echo "⚠️  $1"; }
+} 2>/dev/null || true
 
 # Define log functions if not already available
 if ! command -v log_step &> /dev/null; then
@@ -263,14 +271,17 @@ alias free='free -h'
 alias ps='ps aux'
 alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
 alias top='htop'
-alias ports='netstat -tulanp'
+# Use ss (from iproute2) instead of netstat for better compatibility
+# Note: iproute2 is installed by default on most modern Linux distributions
+# If ss is not available, install with: sudo apt install iproute2
+alias ports='ss -tulanp'
 
 # Network
 alias ping='ping -c 5'
-alias fastping='ping -c 100 -s.2'
+alias fastping='ping -c 100 -i 0.2'
 alias wget='wget -c'
 alias ipe='curl ipinfo.io/ip'
-alias ipi='ipconfig getifaddr en0'
+alias ipi='ip route get 1.1.1.1 2>/dev/null | awk "{print \$7; exit}" || hostname -I | awk "{print \$1}"'
 
 # Git aliases (if git is available)
 alias gs='git status'
@@ -297,19 +308,32 @@ alias py='python3'
 alias pip='pip3'
 
 # Modern replacements (only if installed)
-if command -v exa > /dev/null 2>&1; then
+# Prefer eza over exa (eza is the maintained fork)
+if command -v eza > /dev/null 2>&1; then
+    alias ls='eza --icons'
+    alias ll='eza -alF --icons'
+    alias la='eza -a --icons'
+    alias tree='eza --tree --icons'
+elif command -v exa > /dev/null 2>&1; then
     alias ls='exa --icons'
     alias ll='exa -alF --icons'
     alias la='exa -a --icons'
     alias tree='exa --tree --icons'
 fi
 
-if command -v bat > /dev/null 2>&1; then
+if command -v batcat > /dev/null 2>&1; then
+    alias cat='batcat'
+    alias less='batcat'
+    alias bat='batcat'
+elif command -v bat > /dev/null 2>&1; then
     alias cat='bat'
     alias less='bat'
 fi
 
-if command -v fd > /dev/null 2>&1; then
+if command -v fdfind > /dev/null 2>&1; then
+    alias find='fdfind'
+    alias fd='fdfind'
+elif command -v fd > /dev/null 2>&1; then
     alias find='fd'
 fi
 
@@ -417,28 +441,36 @@ install_modern_cli_tools() {
 install_modern_replacements() {
     log_info "Installing modern CLI tool replacements..."
     
-    # Try to install exa (better ls)
-    if ! command -v exa &> /dev/null; then
-        if sudo apt install -y exa 2>/dev/null; then
-            log_success "exa installed (modern ls replacement)"
+    # Try to install eza (better ls, maintained fork of exa)
+    if ! command -v eza &> /dev/null && ! command -v exa &> /dev/null; then
+        if sudo apt install -y eza 2>/dev/null; then
+            log_success "eza installed (modern ls replacement)"
         else
-            log_info "exa not available in repositories, skipping"
+            log_info "eza not available in repositories, skipping"
         fi
     fi
     
-    # Try to install bat (better cat)
-    if ! command -v bat &> /dev/null; then
+    # Try to install bat (better cat) - package is 'bat', binary is 'batcat' on Ubuntu
+    if ! command -v batcat &> /dev/null && ! command -v bat &> /dev/null; then
         if sudo apt install -y bat 2>/dev/null; then
             log_success "bat installed (modern cat replacement)"
+            # Create alias so 'bat' command works
+            if command -v batcat &> /dev/null; then
+                alias bat='batcat'
+            fi
         else
             log_info "bat not available in repositories, skipping"
         fi
     fi
     
-    # Try to install fd (better find)
-    if ! command -v fd &> /dev/null; then
+    # Try to install fd (better find) - package is 'fd-find', binary is 'fdfind' on Ubuntu
+    if ! command -v fdfind &> /dev/null && ! command -v fd &> /dev/null; then
         if sudo apt install -y fd-find 2>/dev/null; then
             log_success "fd installed (modern find replacement)"
+            # Create alias so 'fd' command works
+            if command -v fdfind &> /dev/null; then
+                alias fd='fdfind'
+            fi
         else
             log_info "fd not available in repositories, skipping"
         fi
@@ -451,6 +483,17 @@ install_modern_replacements() {
         else
             log_info "ripgrep not available in repositories, skipping"
         fi
+    fi
+    
+    # Set up aliases for compatibility after installation
+    if command -v eza &> /dev/null; then
+        alias exa='eza'
+    fi
+    if command -v batcat &> /dev/null; then
+        alias bat='batcat'
+    fi
+    if command -v fdfind &> /dev/null; then
+        alias fd='fdfind'
     fi
 }
 

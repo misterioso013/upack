@@ -2,6 +2,18 @@
 
 source "$(dirname "$0")/../utils/gum.sh"
 
+# Global extensions array for use across functions
+extensions=(
+    "tactile@lundal.io"
+    "just-perfection-desktop@just-perfection"
+    "blur-my-shell@aunetx"
+    "space-bar@luchrioh"
+    "undecorate@sun.wxg@gmail.com"
+    "tophat@fflewddur.github.io"
+    "AlphabeticalAppGrid@stuarthayhurst"
+    "appindicatorsupport@rgcjonas.gmail.com"
+)
+
 # Define log functions if not already available
 if ! command -v log_step &> /dev/null; then
     log_step() { echo "🔄 $1"; }
@@ -36,25 +48,14 @@ install_gnome_extensions() {
     
     log_step "Installing GNOME extensions"
     
-    # Check if gext is available, if not use fallback
+    # Setup extension installation command
+    local EXT_CMD
     if command -v gext &> /dev/null; then
-        EXT_CMD="gext install"
+        EXT_CMD=(gext install)
     else
         log_info "Using gnome-extensions-cli as fallback"
-        EXT_CMD="~/.local/bin/gext install"
+        EXT_CMD=(~/.local/bin/gext install)
     fi
-    
-    # List of extensions to install (matching gnome.md)
-    local extensions=(
-        "tactile@lundal.io"
-        "just-perfection-desktop@just-perfection"
-        "blur-my-shell@aunetx"
-        "space-bar@luchrioh"
-        "undecorate@sun.wxg@gmail.com"
-        "tophat@fflewddur.github.io"
-        "AlphabeticalAppGrid@stuarthayhurst"
-        "appindicatorsupport@rgcjonas.gmail.com"
-    )
     
     # Pause to ask user to accept confirmations
     if command -v gum &> /dev/null; then
@@ -64,10 +65,10 @@ install_gnome_extensions() {
         read -p "Press Enter to continue or Ctrl+C to cancel..."
     fi
     
-    # Install extensions
+    # Install extensions using global array
     for extension in "${extensions[@]}"; do
         log_info "Installing extension: $extension"
-        if ! eval $EXT_CMD "$extension"; then
+        if ! "${EXT_CMD[@]}" "$extension"; then
             log_error "Failed to install $extension, continuing..."
         fi
     done

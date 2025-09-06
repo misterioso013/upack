@@ -1,0 +1,14 @@
+# UPack Alacritty Configuration for btop System Monitor
+
+[general]
+import = [
+    "~/.config/alacritty/pane.toml"
+]
+
+[window.dimensions]
+columns = 121
+lines = 40
+
+[window.padding]
+x = 20
+y = 20

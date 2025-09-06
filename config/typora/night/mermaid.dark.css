@@ -1,0 +1,69 @@
+/* Dark theme Mermaid diagram styles for Typora night theme */
+
+.md-diagram-panel {
+  background-color: var(--background-color);
+}
+
+.md-diagram-panel svg {
+  background-color: var(--background-color);
+}
+
+/* Mermaid flowchart colors */
+.node rect, 
+.node circle, 
+.node ellipse, 
+.node polygon, 
+.node path {
+  fill: var(--code-bg-color);
+  stroke: var(--border-color);
+  stroke-width: 1px;
+}
+
+.node .label {
+  color: var(--font-color);
+}
+
+.edgePath .path {
+  stroke: var(--border-color);
+  stroke-width: 1.5px;
+}
+
+.edgeLabel {
+  background-color: var(--background-color);
+  color: var(--font-color);
+}
+
+/* Mermaid sequence diagram */
+.actor {
+  stroke: var(--border-color);
+  fill: var(--code-bg-color);
+}
+
+.actor-line {
+  stroke: var(--border-color);
+}
+
+.messageLine0, .messageLine1 {
+  stroke: var(--font-color);
+}
+
+.messageText {
+  fill: var(--font-color);
+}
+
+.labelBox {
+  stroke: var(--border-color);
+  fill: var(--code-bg-color);
+}
+
+.labelText {
+  fill: var(--font-color);
+}
+
+.loopText {
+  fill: var(--font-color);
+}
+
+.noteText {
+  fill: var(--font-color);
+}

@@ -1,0 +1,41 @@
+# UPack Alacritty Shared Configuration
+# Configurations shared between different UPack terminal modes
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+title = "UPack Terminal"
+
+[window.padding]
+x = 10
+y = 10
+
+[scrolling]
+history = 10000
+
+[selection]
+save_to_clipboard = true
+
+[cursor.style]
+shape = "Block"
+
+[terminal.shell]
+program = "/bin/bash"
+args = ["--login"]
+
+# Key bindings
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "Insert"
+mods = "Shift"
+action = "PasteSelection"

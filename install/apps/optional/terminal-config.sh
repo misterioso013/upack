@@ -3,7 +3,15 @@
 # Configure elegant terminal themes and settings
 # Supports GNOME Terminal, Alacritty, and other popular terminals
 
-source "$(dirname "$0")/../../utils/gum.sh" 2>/dev/null || true
+UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
+source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
+    # Fallback log functions if gum.sh not available
+    log_step() { echo "🔄 $1"; }
+    log_info() { echo "ℹ️  $1"; }
+    log_success() { echo "✅ $1"; }
+    log_error() { echo "❌ $1"; }
+    log_warning() { echo "⚠️  $1"; }
+} 2>/dev/null || true
 
 # Define log functions if not already available
 if ! command -v log_step &> /dev/null; then
@@ -74,7 +82,13 @@ configure_alacritty() {
     # Install Alacritty
     if ! command -v alacritty &> /dev/null; then
         if sudo apt update && sudo apt install -y alacritty; then
-            log_success "Alacritty installed via APT"
+            # Verify installation succeeded
+            if command -v alacritty >/dev/null 2>&1; then
+                log_success "Alacritty installed via APT"
+            else
+                log_warning "Alacritty installation completed but binary not found"
+                return 1
+            fi
         else
             log_warning "Failed to install Alacritty, skipping configuration"
             return 1
@@ -307,7 +321,27 @@ configure_zsh() {
         log_info "Installing Oh My Zsh..."
         export RUNZSH=no
         export CHSH=no
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+        
+        # Download installer to temp file with error checking
+        local temp_installer="/tmp/oh-my-zsh-install.sh"
+        if ! curl -fsSLo "$temp_installer" "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"; then
+            log_error "Failed to download Oh My Zsh installer (curl exit code: $?)"
+            rm -f "$temp_installer"
+            return 1
+        fi
+        
+        # Run installer and check exit status
+        if sh "$temp_installer" --unattended; then
+            log_success "Oh My Zsh installed successfully"
+        else
+            local installer_exit_code=$?
+            log_error "Oh My Zsh installation failed (installer exit code: $installer_exit_code)"
+            rm -f "$temp_installer"
+            return 1
+        fi
+        
+        # Cleanup temp file
+        rm -f "$temp_installer"
     else
         log_info "Oh My Zsh already installed"
     fi
@@ -333,17 +367,38 @@ install_zsh_plugins() {
     
     # zsh-autosuggestions
     if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-        git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+        log_info "Installing zsh-autosuggestions..."
+        if git clone https://github.com/zsh-users/zsh-autosuggestions "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"; then
+            log_success "zsh-autosuggestions installed"
+        else
+            log_error "Failed to clone zsh-autosuggestions from https://github.com/zsh-users/zsh-autosuggestions to $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+            rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+            return 1
+        fi
     fi
     
     # zsh-syntax-highlighting
     if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+        log_info "Installing zsh-syntax-highlighting..."
+        if git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"; then
+            log_success "zsh-syntax-highlighting installed"
+        else
+            log_error "Failed to clone zsh-syntax-highlighting from https://github.com/zsh-users/zsh-syntax-highlighting.git to $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+            rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+            return 1
+        fi
     fi
     
     # zsh-completions
     if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ]; then
-        git clone https://github.com/zsh-users/zsh-completions "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+        log_info "Installing zsh-completions..."
+        if git clone https://github.com/zsh-users/zsh-completions "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"; then
+            log_success "zsh-completions installed"
+        else
+            log_error "Failed to clone zsh-completions from https://github.com/zsh-users/zsh-completions to $HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+            rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+            return 1
+        fi
     fi
 }
 
@@ -527,16 +582,49 @@ configure_terminal_fonts() {
         # Create fonts directory
         mkdir -p "$HOME/.local/share/fonts"
         
-        # Download JetBrains Mono
-        wget -O /tmp/JetBrainsMono.zip https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip
-        unzip -o /tmp/JetBrainsMono.zip -d /tmp/JetBrainsMono/
-        cp /tmp/JetBrainsMono/fonts/ttf/*.ttf "$HOME/.local/share/fonts/"
+        # Setup cleanup trap
+        local temp_zip="/tmp/JetBrainsMono.zip"
+        local temp_dir="/tmp/JetBrainsMono"
+        trap 'rm -rf "$temp_zip" "$temp_dir"' EXIT
+        
+        # Download JetBrains Mono with error checking
+        if ! wget -O "$temp_zip" "https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip"; then
+            log_error "Failed to download JetBrains Mono font (wget exit code: $?)"
+            return 1
+        fi
+        
+        # Verify file was downloaded
+        if [ ! -f "$temp_zip" ] || [ ! -s "$temp_zip" ]; then
+            log_error "JetBrains Mono font download appears to have failed - file missing or empty"
+            return 1
+        fi
+        
+        # Unzip with error checking
+        if ! unzip -o "$temp_zip" -d "$temp_dir/"; then
+            log_error "Failed to extract JetBrains Mono font archive (unzip exit code: $?)"
+            return 1
+        fi
+        
+        # Verify TTF files exist
+        if [ ! -d "$temp_dir/fonts/ttf" ] || [ -z "$(find "$temp_dir/fonts/ttf" -name "*.ttf" 2>/dev/null)" ]; then
+            log_error "JetBrains Mono TTF files not found after extraction"
+            return 1
+        fi
+        
+        # Copy fonts with proper permissions
+        if ! cp "$temp_dir/fonts/ttf/"*.ttf "$HOME/.local/share/fonts/"; then
+            log_error "Failed to copy JetBrains Mono fonts to $HOME/.local/share/fonts/"
+            return 1
+        fi
+        
+        # Set correct permissions
+        chmod 644 "$HOME/.local/share/fonts/"JetBrainsMono*.ttf
         
         # Update font cache
-        fc-cache -fv "$HOME/.local/share/fonts/" >/dev/null 2>&1
-        
-        # Cleanup
-        rm -rf /tmp/JetBrainsMono /tmp/JetBrainsMono.zip
+        if ! fc-cache -fv "$HOME/.local/share/fonts/" >/dev/null 2>&1; then
+            log_error "Failed to update font cache (fc-cache exit code: $?)"
+            return 1
+        fi
         
         log_success "JetBrains Mono font installed"
     else
@@ -547,10 +635,47 @@ configure_terminal_fonts() {
     if ! fc-list | grep -q "JetBrainsMono Nerd Font"; then
         log_info "Installing JetBrains Mono Nerd Font..."
         
-        wget -O /tmp/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-        unzip -o /tmp/JetBrainsMono.zip -d "$HOME/.local/share/fonts/"
-        fc-cache -fv "$HOME/.local/share/fonts/" >/dev/null 2>&1
-        rm /tmp/JetBrainsMono.zip
+        local temp_zip="/tmp/JetBrainsMonoNerd.zip"
+        trap 'rm -rf "$temp_zip"' EXIT
+        
+        # Download with retries for transient failures
+        local max_retries=3
+        local retry=0
+        while [ $retry -lt $max_retries ]; do
+            if wget -O "$temp_zip" "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"; then
+                break
+            else
+                retry=$((retry + 1))
+                if [ $retry -lt $max_retries ]; then
+                    log_info "Download attempt $retry failed, retrying in 2 seconds..."
+                    sleep 2
+                else
+                    log_error "Failed to download JetBrains Mono Nerd Font after $max_retries attempts"
+                    return 1
+                fi
+            fi
+        done
+        
+        # Verify download
+        if [ ! -f "$temp_zip" ] || [ ! -s "$temp_zip" ]; then
+            log_error "JetBrains Mono Nerd Font download failed - file missing or empty"
+            return 1
+        fi
+        
+        # Extract and install
+        if ! unzip -o "$temp_zip" -d "$HOME/.local/share/fonts/"; then
+            log_error "Failed to extract JetBrains Mono Nerd Font (unzip exit code: $?)"
+            return 1
+        fi
+        
+        # Set permissions on installed fonts
+        chmod 644 "$HOME/.local/share/fonts/"*JetBrains*
+        
+        # Update font cache
+        if ! fc-cache -fv "$HOME/.local/share/fonts/" >/dev/null 2>&1; then
+            log_error "Failed to update font cache after Nerd Font installation"
+            return 1
+        fi
         
         log_success "JetBrains Mono Nerd Font installed"
     else

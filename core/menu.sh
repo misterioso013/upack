@@ -18,21 +18,21 @@ echo "Configuring Git..."
 bash utils/git.sh
 
 echo "🚧 Installing required tools..."
-bash core/required.sh
+bash "$UPACK_DIR/core/required.sh"
 
 echo ""
 if gum confirm "✨ Do you want to install optional apps (games, emulators, VPNs, etc.)?"; then
-  bash core/optional.sh
+  bash "$UPACK_DIR/core/optional.sh"
 fi
 
 echo ""
 if gum confirm "🎨 Do you want to configure elegant terminal settings?"; then
-  bash config/terminal/terminal-menu.sh
+  bash "$UPACK_DIR/config/terminal/terminal-menu.sh"
 fi
 
 echo ""
 if gum confirm "⌨️  Do you want to configure GNOME productivity hotkeys?"; then
-  bash config/gnome/hotkeys-menu.sh
+  bash "$UPACK_DIR/config/gnome/hotkeys-menu.sh"
 fi
 
 echo "✅ All done!"

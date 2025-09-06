@@ -78,6 +78,14 @@ apply_extension_configs() {
     
     log_success "Extension configuration applied!"
     log_info "Some changes may require logging out and back in to take effect"
+    
+    # Ask if user wants to configure productivity hotkeys
+    echo ""
+    if gum confirm "🎯 Would you like to configure productivity hotkeys for GNOME?"; then
+        bash "$(dirname "$0")/hotkeys.sh"
+    else
+        log_info "Hotkeys configuration skipped"
+    fi
 }
 
 # Main execution

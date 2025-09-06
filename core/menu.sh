@@ -30,4 +30,9 @@ if gum confirm "🎨 Do you want to configure elegant terminal settings?"; then
   bash config/terminal/terminal-menu.sh
 fi
 
+echo ""
+if gum confirm "⌨️  Do you want to configure GNOME productivity hotkeys?"; then
+  bash config/gnome/hotkeys-menu.sh
+fi
+
 echo "✅ All done!"

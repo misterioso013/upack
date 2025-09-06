@@ -49,7 +49,7 @@ Run one command and get your machine ready for coding - fast, clean, and just es
 
 ### One-Line Installation
 ```bash
-curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/install.sh | bash
 ```
 
 ### Manual Installation

@@ -113,7 +113,7 @@ install_rust() {
     fi
     
     # Install popular Rust tools
-    cargo install ripgrep fd-find bat exa starship bottom
+    # cargo install ripgrep fd-find bat exa starship bottom
     
     log_success "Rust $(rustc --version) installed with cargo and popular tools"
 }

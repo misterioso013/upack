@@ -25,7 +25,7 @@ UPack is the ultimate solution to transform your fresh Ubuntu installation into 
 ### One Line to Rule Them All
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/install.sh | bash
 ```
 
 ### Manual Installation (Recommended for Developers)

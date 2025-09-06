@@ -1,6 +1,11 @@
 # 🚀 UPack - Ubuntu Productivity Pack
+## 📚 Complete Documentation
 
-A comprehensive system manager and productivity suite that transforms your Ubuntu desktop into a beautiful, efficient workspace.
+- **[📖 Complete User Guide](docs/COMPLETE_GUIDE.md)** - Full documentation with everything you need to know
+- **[⚡ Quick Reference](docs/QUICK_REFERENCE.md)** - Essential daily commands and shortcuts
+- **[🛠️ Development Guide](docs/development/FIXES.md)** - For contributors and developers
+
+## 🚀 Quick Startmprehensive system manager and productivity suite that transforms your Ubuntu desktop into a beautiful, efficient workspace.
 
 ## ✨ Features
 
@@ -34,7 +39,13 @@ Run one command and get your machine ready for coding - fast, clean, and just es
 - **Update Management**: Keep all apps updated with `upack update`
 - **System Health**: Monitor and maintain system performance
 
-## 🚀 Quick Start
+## � Documentação Completa
+
+- **[📖 Guia Completo do Usuário](docs/GUIA_COMPLETO.md)** - Documentação completa com tudo que você precisa saber
+- **[⚡ Referência Rápida](docs/REFERENCIA_RAPIDA.md)** - Comandos e atalhos essenciais para uso diário
+- **[🛠️ Guia de Desenvolvimento](docs/development/FIXES.md)** - Para contribuidores e desenvolvedores
+
+## �🚀 Quick Start
 
 ### One-Line Installation
 ```bash

@@ -31,3 +31,20 @@ cat assets/banner.txt || true
 
 echo "🚀 Starting Upack..."
 bash core/menu.sh
+
+# Set dark mode
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
+# Set accent color to orange
+gsettings set org.gnome.desktop.interface accent-color 'orange'
+
+# Set wallpaper
+WALLPAPER_PATH="$INSTALL_DIR/assets/ubuntu-neo-wallpaper.jpg"
+if [ -f "$WALLPAPER_PATH" ]; then
+    gsettings set org.gnome.desktop.background picture-uri "file://$WALLPAPER_PATH"
+    gsettings set org.gnome.desktop.background picture-uri-dark "file://$WALLPAPER_PATH"
+    gsettings set org.gnome.desktop.background picture-options 'zoom'
+    echo "✅ Wallpaper applied: $WALLPAPER_PATH"
+else
+    echo "❌ Wallpaper not found: $WALLPAPER_PATH"
+fi

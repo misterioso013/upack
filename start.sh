@@ -38,5 +38,8 @@ source core/common.sh
 # Configure GNOME settings
 configure_gnome_settings "$INSTALL_DIR"
 
+# Install theme (optional)
+install_theme "$INSTALL_DIR"
+
 # Handle reboot prompt
 handle_reboot_prompt

@@ -48,6 +48,29 @@ configure_gnome_settings() {
   fi
 }
 
+# Install and configure the minimalista theme
+install_theme() {
+  local install_dir="$1"
+  
+  echo "🎨 Do you want to install the minimalista theme? (WhiteSur + Nordzy + Sunity + SF Pro fonts)"
+  
+  if command -v gum &>/dev/null; then
+    if gum confirm "Install minimalista theme?"; then
+      bash "$install_dir/install/theme.sh"
+    else
+      echo "⏭️ Theme installation skipped"
+    fi
+  else
+    echo "Install minimalista theme? (y/N)"
+    read -r answer
+    if [[ $answer =~ ^[Yy]$ ]]; then
+      bash "$install_dir/install/theme.sh"
+    else
+      echo "⏭️ Theme installation skipped"
+    fi
+  fi
+}
+
 # Ask user about reboot and handle the response
 handle_reboot_prompt() {
   echo ""

@@ -295,7 +295,6 @@ alias autoclean='sudo apt autoclean'
 # Development
 alias py='python3'
 alias pip='pip3'
-alias serve='python3 -m http.server'
 
 # Modern replacements (only if installed)
 if command -v exa > /dev/null 2>&1; then
@@ -367,7 +366,7 @@ alias sysinfo='uname -a'
 alias docs='cd ~/Documents'
 alias down='cd ~/Downloads'
 alias desk='cd ~/Desktop'
-alias proj='cd ~/Projects'
+alias proj='cd ~/projects'
 
 # Terminal enhancement
 alias c='clear'

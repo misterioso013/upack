@@ -25,4 +25,9 @@ if gum confirm "✨ Do you want to install optional apps (games, emulators, VPNs
   bash core/optional.sh
 fi
 
+echo ""
+if gum confirm "🎨 Do you want to configure elegant terminal settings?"; then
+  bash config/terminal/terminal-menu.sh
+fi
+
 echo "✅ All done!"

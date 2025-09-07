@@ -57,13 +57,9 @@ install_gnome_extensions() {
         EXT_CMD=(~/.local/bin/gext install)
     fi
     
-    # Pause to ask user to accept confirmations
-    if command -v gum &> /dev/null; then
-        gum confirm "To install GNOME extensions, you'll need to accept some confirmations. Ready?" || return 1
-    else
-        echo "To install GNOME extensions, you'll need to accept some confirmations."
-        read -p "Press Enter to continue or Ctrl+C to cancel..."
-    fi
+    # Install extensions (user will see browser prompts for confirmation)
+    echo "Installing GNOME extensions..."
+    echo "Note: You may see browser popups asking for confirmation - please accept them"
     
     # Install extensions using global array
     for extension in "${extensions[@]}"; do

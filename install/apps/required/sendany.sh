@@ -17,39 +17,14 @@ if ! command -v google-chrome &>/dev/null; then
   return 0 2>/dev/null || true
 fi
 
-echo "📦 Installing SendAny PWA..."
+echo "📦 Checking SendAny PWA requirements..."
 
-# Create applications directory if it doesn't exist
-mkdir -p ~/.local/share/applications
-
-# Get the script directory to find the icon
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UPACK_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-ICON_PATH="$HOME/.local/share/upack/assets/icons/sendany.png"
-
-# Create the desktop entry
-cat <<EOF >~/.local/share/applications/sendany.desktop
-[Desktop Entry]
-Version=1.0
-Name=SendAny
-Comment=Share anything with anyone
-Exec=google-chrome --app="https://sendany.all.dev.br" --name=SendAny --class=SendAny
-Terminal=false
-Type=Application
-Icon=$ICON_PATH
-Categories=Network;Utility;
-MimeType=text/html;text/xml;application/xhtml_xml;
-StartupNotify=true
-NoDisplay=false
-EOF
-
-# Make the desktop entry executable
-chmod +x ~/.local/share/applications/sendany.desktop
-
-# Update desktop database to make the app appear in menus
-if command -v update-desktop-database &>/dev/null; then
-  update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
+# Just verify Chrome is available for later installation
+if ! command -v google-chrome &>/dev/null; then
+    echo "⚠️  Google Chrome is required for SendAny PWA but not found."
+    echo "   SendAny will be properly installed after Chrome is available."
+    exit 0
 fi
 
-echo "✅ SendAny PWA installed successfully."
-echo "   You can now find SendAny in your applications menu."
+echo "✅ SendAny PWA requirements met."
+echo "   Desktop application will be installed by the infrastructure setup."

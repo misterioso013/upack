@@ -45,30 +45,6 @@ else
     echo "ℹ️  ~/.local/bin already in PATH"
 fi
 
-# Install UPack Manager GUI application
-echo "🚀 Installing UPack Manager app..."
-
-# Copy desktop entry
-DESKTOP_FILE="$HOME/.local/share/applications/upack-manager.desktop"
-mkdir -p "$(dirname "$DESKTOP_FILE")"
-
-cat > "$DESKTOP_FILE" << EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=UPack Manager
-Comment=Ubuntu Productivity Pack Manager
-Exec=$HOME/.local/bin/upack status
-Icon=$UPACK_ROOT/assets/icons/upack.png
-Terminal=true
-Categories=System;Settings;
-Keywords=upack;ubuntu;productivity;manager;
-StartupNotify=true
-EOF
-
-chmod +x "$DESKTOP_FILE"
-echo "✅ UPack Manager app installed"
-
 # Test CLI availability
 if command -v upack >/dev/null 2>&1 || [ -x "$HOME/.local/bin/upack" ]; then
     echo "✅ UPack CLI installation completed"

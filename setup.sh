@@ -50,6 +50,8 @@ run_installation_steps() {
         "terminal-config.sh:Configuring terminal"
         "fonts-install.sh:Installing fonts"
         "cli-install.sh:Installing UPack CLI"
+        "infrastructure.sh:Setting up permanent infrastructure"
+        "apps-install.sh:Installing desktop applications"
     )
     
     local step_number=1

@@ -4,18 +4,28 @@
 # Modern CLI for post-installation management
 
 VERSION="2.0.0"
-# Resolve real path even if called via symlink
-if [[ -L "${BASH_SOURCE[0]}" ]]; then
-    SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+
+# Detect UPack installation location
+# Try permanent installation first, then fall back to development
+if [[ -d "$HOME/.local/share/upack" ]]; then
+    # Permanent installation
+    UPACK_ROOT="$HOME/.local/share/upack"
+    source "$UPACK_ROOT/environment" 2>/dev/null || true
 else
-    SCRIPT_PATH="${BASH_SOURCE[0]}"
-fi
-SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
-# Ensure UPACK_ROOT points to the correct directory (bin is inside upack root)
-if [[ "$(basename "$SCRIPT_DIR")" == "bin" ]]; then
-    UPACK_ROOT="$(dirname "$SCRIPT_DIR")"
-else
-    UPACK_ROOT="$SCRIPT_DIR"
+    # Development/temporary installation
+    # Resolve real path even if called via symlink
+    if [[ -L "${BASH_SOURCE[0]}" ]]; then
+        SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+    else
+        SCRIPT_PATH="${BASH_SOURCE[0]}"
+    fi
+    SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+    # Ensure UPACK_ROOT points to the correct directory (bin is inside upack root)
+    if [[ "$(basename "$SCRIPT_DIR")" == "bin" ]]; then
+        UPACK_ROOT="$(dirname "$SCRIPT_DIR")"
+    else
+        UPACK_ROOT="$SCRIPT_DIR"
+    fi
 fi
 
 # Colors

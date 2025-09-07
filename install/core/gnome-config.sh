@@ -11,18 +11,31 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Install GNOME extensions first
 echo "🧩 Installing GNOME extensions..."
-bash "$SCRIPT_DIR/../gnome-extensions.sh" &>/dev/null || echo "⚠️  Some extensions may have failed"
+if ! timeout 120 bash "$SCRIPT_DIR/../gnome-extensions.sh" &>/dev/null; then
+    echo "⚠️  Extension installation timed out or failed"
+fi
 
-# Apply GNOME configurations
+# Wait for GNOME Shell to reload
+echo "⏳ Waiting for GNOME Shell to reload..."
+sleep 5
+
+# Apply GNOME configurations with timeout and non-interactive mode
 echo "⚙️  Applying GNOME settings..."
-bash "$SCRIPT_DIR/../../config/gnome/apply-config.sh" &>/dev/null || echo "⚠️  Some settings may have failed"
+export UPACK_SKIP_HOTKEYS=1
+if ! timeout 60 bash "$SCRIPT_DIR/../../config/gnome/apply-config.sh" "$SCRIPT_DIR/../.." &>/dev/null; then
+    echo "⚠️  GNOME settings application timed out"
+fi
 
-# Configure hotkeys
+# Configure hotkeys separately
 echo "⌨️  Setting up keyboard shortcuts..."
-bash "$SCRIPT_DIR/../../config/gnome/hotkeys.sh" &>/dev/null || echo "⚠️  Some shortcuts may have failed"
+if ! timeout 30 bash "$SCRIPT_DIR/../../config/gnome/hotkeys.sh" &>/dev/null; then
+    echo "⚠️  Hotkeys setup timed out"
+fi
 
 # Configure dock
 echo "🚢 Configuring dock..."
-bash "$SCRIPT_DIR/../../config/gnome/dock-config.sh" &>/dev/null || echo "ℹ️  Dock config skipped"
+if ! timeout 30 bash "$SCRIPT_DIR/../../config/gnome/dock-config.sh" &>/dev/null; then
+    echo "ℹ️  Dock configuration timed out"
+fi
 
 echo "✅ GNOME configuration completed"

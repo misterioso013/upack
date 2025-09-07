@@ -32,8 +32,14 @@ apply_extension_configs() {
     
     log_step "Applying GNOME extensions configuration"
     
-    # Wait for extensions to be loaded
-    sleep 3
+    # Wait for extensions to be loaded (but not too long)
+    sleep 2
+    
+    # Check if GNOME Shell is responsive
+    if ! timeout 5 gsettings list-schemas &>/dev/null; then
+        log_error "GNOME Shell not responsive, skipping configuration"
+        return 1
+    fi
     
     # Parse and apply configuration
     local current_section=""
@@ -89,12 +95,12 @@ apply_extension_configs() {
                 fi
                 
                 # Check if the schema exists and is writable
-                if gsettings list-schemas | grep -q "^$schema$"; then
-                    if gsettings writable "$schema" "$key" 2>/dev/null | grep -q "true"; then
+                if timeout 10 gsettings list-schemas | grep -q "^$schema$" 2>/dev/null; then
+                    if timeout 10 gsettings writable "$schema" "$key" 2>/dev/null | grep -q "true"; then
                         log_info "Setting $schema.$key = $processed_value"
-                        gsettings set "$schema" "$key" "$processed_value" 2>/dev/null || {
-                            log_error "Failed to set $schema.$key"
-                        }
+                        if ! timeout 10 gsettings set "$schema" "$key" "$processed_value" 2>/dev/null; then
+                            log_error "Failed to set $schema.$key (timeout or error)"
+                        fi
                     else
                         log_info "Skipping non-writable key: $schema.$key"
                     fi

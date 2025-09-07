@@ -9,6 +9,9 @@ echo "📱 Installing essential applications..."
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Set UPACK_DIR for compatibility with existing scripts
+export UPACK_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
 # List of essential apps to install
 ESSENTIAL_APPS=(
     "chrome"

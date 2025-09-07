@@ -32,35 +32,35 @@
   - [x] ✅ `utils/mise.sh` (fonte de conflitos)
 
 ### 📁 Reorganização da Estrutura
-- [ ] ⏸️ **CRIAR nova estrutura**:
-  - [ ] ⏸️ `install/core/dependencies.sh`
-  - [ ] ⏸️ `install/core/essential-apps.sh` 
-  - [ ] ⏸️ `install/core/theme-setup.sh`
-  - [ ] ⏸️ `install/core/gnome-config.sh`
-  - [ ] ⏸️ `install/core/terminal-setup.sh`
-  - [ ] ⏸️ `install/core/fonts-install.sh`
-  - [ ] ⏸️ `install/core/upack-cli.sh`
+- [x] ✅ **CRIAR nova estrutura**:
+  - [x] ✅ `install/core/dependencies.sh`
+  - [x] ✅ `install/core/essential-apps.sh` 
+  - [x] ✅ `install/core/theme-setup.sh`
+  - [x] ✅ `install/core/gnome-config.sh`
+  - [x] ✅ `install/core/terminal-setup.sh`
+  - [x] ✅ `install/core/fonts-install.sh`
+  - [x] ✅ `install/core/upack-cli.sh`
 
 ---
 
 ## 📋 **FASE 2: Novo Setup Automático**
 
 ### 🚀 Setup.sh Simplificado
-- [ ] ⏸️ **CRIAR novo setup.sh**:
-  - [ ] ⏸️ Banner simples (sem dependência de gum)
-  - [ ] ⏸️ Execução linear automática
-  - [ ] ⏸️ Sem menus ou interações
-  - [ ] ⏸️ Logs claros de progresso
-  - [ ] ⏸️ Só pergunta sobre reinicialização no final
+- [x] ✅ **CRIAR novo setup.sh**:
+  - [x] ✅ Banner simples (sem dependência de gum)
+  - [x] ✅ Execução linear automática
+  - [x] ✅ Sem menus ou interações
+  - [x] ✅ Logs claros de progresso
+  - [x] ✅ Só pergunta sobre reinicialização no final
 
 ### 🔧 Scripts Core (Automáticos)
-- [ ] ⏸️ **dependencies.sh**: curl, wget, git, essenciais
-- [ ] ⏸️ **essential-apps.sh**: Chrome, VS Code, VLC, etc.
-- [ ] ⏸️ **theme-setup.sh**: WhiteSur tema automático
-- [ ] ⏸️ **gnome-config.sh**: Extensões e configurações
-- [ ] ⏸️ **terminal-setup.sh**: Bash/prompt personalizado  
-- [ ] ⏸️ **fonts-install.sh**: SF Pro Display
-- [ ] ⏸️ **upack-cli.sh**: Instalação do CLI final
+- [x] ✅ **dependencies.sh**: curl, wget, git, essenciais
+- [x] ✅ **essential-apps.sh**: Chrome, VS Code, VLC, etc.
+- [x] ✅ **theme-setup.sh**: WhiteSur tema automático
+- [x] ✅ **gnome-config.sh**: Extensões e configurações
+- [x] ✅ **terminal-setup.sh**: Bash/prompt personalizado  
+- [x] ✅ **fonts-install.sh**: SF Pro Display
+- [x] ✅ **upack-cli.sh**: Instalação do CLI final
 
 ---
 
@@ -140,15 +140,21 @@
 ## 📝 **NOTAS DE PROGRESSO**
 
 ### 📅 **7 de Setembro, 2025**
-- ✅ Análise completa realizada
-- ✅ Identificados todos os problemas críticos
-- ✅ Documento de reestruturação criado
-- 🔄 **PRÓXIMO**: Iniciar Fase 1 - Backup e limpeza
+- ✅ **09:00** - Análise completa realizada
+- ✅ **09:30** - Identificados todos os problemas críticos
+- ✅ **10:00** - Documento de reestruturação criado
+- ✅ **10:30** - Backup da branch atual (restructure-backup)
+- ✅ **11:00** - **FASE 1 COMPLETA**: Limpeza de arquivos desnecessários
+- ✅ **12:00** - **FASE 2 COMPLETA**: Novo setup.sh automático criado
+- ✅ **12:30** - Scripts core implementados (dependencies, apps, theme, etc.)
+- ✅ **16:00** - **BUG FIX**: Problema de sudo em ambientes restritos resolvido
+- ✅ **16:15** - **BUG FIX**: Variáveis de ambiente para scripts existentes
+- 🔄 **PRÓXIMO**: Continuar testes e resolver problemas restantes
 
-### 📊 **Progresso Atual: 10%**
-- **Concluído**: Planejamento e análise
-- **Em andamento**: Preparação para implementação  
-- **Próximo milestone**: Fase 1 completa
+### 📊 **Progresso Atual: 65%**
+- **Concluído**: Fases 1 e 2 + Correções críticas
+- **Em andamento**: Testes e refinamentos
+- **Próximo milestone**: Setup funcional 100% + Fase 3 (CLI)
 
 ---
 

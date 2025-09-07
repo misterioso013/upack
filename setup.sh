@@ -52,6 +52,18 @@ main() {
     echo -e "${WHITE}🚀 Starting automatic UPack setup...${NC}"
     echo ""
     
+    # Check environment
+    if [ -n "$container" ] || [ -f /.dockerenv ]; then
+        echo -e "${YELLOW}⚠️  Container environment detected${NC}"
+        echo -e "${YELLOW}Some features may be limited${NC}"
+        echo ""
+    fi
+    
+    # Inform about sudo requirement
+    echo -e "${CYAN}🔐 This setup requires administrative privileges to install system packages${NC}"
+    echo -e "${WHITE}You will be prompted for your password when needed${NC}"
+    echo ""
+    
     # Get script directory
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     
@@ -61,6 +73,14 @@ main() {
         show_success "Dependencies installed"
     else
         show_error "Dependencies installation failed"
+        echo ""
+        echo -e "${YELLOW}💡 This usually happens due to:${NC}"
+        echo -e "${WHITE}  • Incorrect password or insufficient privileges${NC}"
+        echo -e "${WHITE}  • Network connectivity issues${NC}"
+        echo -e "${WHITE}  • Container/restricted environment${NC}"
+        echo -e "${WHITE}  • Package manager locked by another process${NC}"
+        echo ""
+        echo -e "${CYAN}Please fix the issue and run ./setup.sh again${NC}"
         exit 1
     fi
     

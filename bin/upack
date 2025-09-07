@@ -4,8 +4,19 @@
 # Modern CLI for post-installation management
 
 VERSION="2.0.0"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-UPACK_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# Resolve real path even if called via symlink
+if [[ -L "${BASH_SOURCE[0]}" ]]; then
+    SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+else
+    SCRIPT_PATH="${BASH_SOURCE[0]}"
+fi
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+# Ensure UPACK_ROOT points to the correct directory (bin is inside upack root)
+if [[ "$(basename "$SCRIPT_DIR")" == "bin" ]]; then
+    UPACK_ROOT="$(dirname "$SCRIPT_DIR")"
+else
+    UPACK_ROOT="$SCRIPT_DIR"
+fi
 
 # Colors
 RED='\033[0;31m'

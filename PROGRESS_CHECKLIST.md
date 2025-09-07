@@ -16,19 +16,20 @@
 - [x] ✅ Definição da nova arquitetura
 
 ### 🔄 Backup e Preparação
-- [ ] 🔄 **EM ANDAMENTO**: Fazer backup da branch atual
-- [ ] ⏸️ Criar branch `restructure` para desenvolvimento
-- [ ] ⏸️ Documentar estrutura atual para referência
+- [x] ✅ **CONCLUÍDO**: Fazer backup da branch atual
+- [x] ✅ **CONCLUÍDO**: Criar branch `restructure-work` para desenvolvimento
+- [x] ✅ **CONCLUÍDO**: Documentar estrutura atual para referência
 
 ### 🗂️ Limpeza de Arquivos
-- [ ] ⏸️ **REMOVER arquivos desnecessários**:
-  - [ ] ⏸️ `start.sh` (confunde com setup.sh)
-  - [ ] ⏸️ `install.sh` (redundante) 
-  - [ ] ⏸️ `dev.sh` (desenvolvimento apenas)
-  - [ ] ⏸️ `core/menu.sh` (sem menu no setup)
-  - [ ] ⏸️ `core/optional.sh` (apps opcionais só depois)
-  - [ ] ⏸️ `install/apps/optional/dev-languages.sh` (fragmentado)
-  - [ ] ⏸️ `install/apps/optional/mise-setup.sh` (duplicação)
+- [x] ✅ **REMOVER arquivos desnecessários**:
+  - [x] ✅ `start.sh` (confunde com setup.sh)
+  - [x] ✅ `install.sh` (redundante) 
+  - [x] ✅ `dev.sh` (desenvolvimento apenas)
+  - [x] ✅ `core/menu.sh` (sem menu no setup)
+  - [x] ✅ `core/optional.sh` (apps opcionais só depois)
+  - [x] ✅ `install/apps/optional/dev-languages.sh` (fragmentado)
+  - [x] ✅ `install/apps/optional/mise-setup.sh` (duplicação)
+  - [x] ✅ `utils/mise.sh` (fonte de conflitos)
 
 ### 📁 Reorganização da Estrutura
 - [ ] ⏸️ **CRIAR nova estrutura**:

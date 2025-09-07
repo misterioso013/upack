@@ -1,15 +1,12 @@
 #!/bin/bash
 
-# UPack Quick Setup Script
-# Initializes UPack system after installation
+# UPack - Ubuntu Setup Automático
+# Transforma Ubuntu recém-formatado em sistema produtivo
+# Usage: ./setup.sh
 
 set -e
 
-# Source common functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/utils/gum.sh" 2>/dev/null || true
-
-# Color definitions (fallback if gum not available)
+# Color definitions
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -21,33 +18,142 @@ NC='\033[0m'
 
 show_banner() {
     clear
-    if [ -f "$SCRIPT_DIR/assets/banner.txt" ]; then
-        cat "$SCRIPT_DIR/assets/banner.txt"
-    else
-        echo -e "${BLUE}${BOLD}"
-        echo "██╗   ██╗██████╗  █████╗  ██████╗██╗  ██╗"
-        echo "██║   ██║██╔══██╗██╔══██╗██╔════╝██║ ██╔╝"
-        echo "██║   ██║██████╔╝███████║██║     █████╔╝ "
-        echo "██║   ██║██╔═══╝ ██╔══██║██║     ██╔═██╗ "
-        echo "╚██████╔╝██║     ██║  ██║╚██████╗██║  ██╗"
-        echo " ╚═════╝ ╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝"
-        echo -e "${NC}"
-    fi
-    echo -e "${CYAN}${BOLD}Ubuntu Productivity Package${NC}"
-    echo -e "${WHITE}Making Ubuntu beautiful and productive${NC}"
+    echo -e "${BLUE}${BOLD}"
+    echo "██╗   ██╗██████╗  █████╗  ██████╗██╗  ██╗"
+    echo "██║   ██║██╔══██╗██╔══██╗██╔════╝██║ ██╔╝"
+    echo "██║   ██║██████╔╝███████║██║     █████╔╝ "
+    echo "██║   ██║██╔═══╝ ██╔══██║██║     ██╔═██╗ "
+    echo "╚██████╔╝██║     ██║  ██║╚██████╗██║  ██╗"
+    echo " ╚═════╝ ╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝"
+    echo -e "${NC}"
+    echo -e "${CYAN}${BOLD}Ubuntu Productivity Pack - Automatic Setup${NC}"
+    echo -e "${WHITE}Transforming your Ubuntu into a productive system...${NC}"
+    echo ""
+    echo -e "${YELLOW}⏱️  Estimated time: 10-15 minutes${NC}"
+    echo -e "${YELLOW}☕ Perfect time for a coffee break!${NC}"
     echo ""
 }
 
-show_menu() {
-    echo -e "${BLUE}${BOLD}UPack Quick Setup${NC}"
+show_step() {
+    echo -e "${BLUE}${BOLD}[$(date +'%H:%M:%S')] $1${NC}"
+}
+
+show_success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
+
+show_error() {
+    echo -e "${RED}❌ $1${NC}"
+}
+
+main() {
+    show_banner
+    
+    echo -e "${WHITE}🚀 Starting automatic UPack setup...${NC}"
     echo ""
-    echo "Choose installation type:"
+    
+    # Get script directory
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    
+    # Step 1: Dependencies
+    show_step "Installing essential dependencies..."
+    if bash "$SCRIPT_DIR/install/core/dependencies.sh"; then
+        show_success "Dependencies installed"
+    else
+        show_error "Dependencies installation failed"
+        exit 1
+    fi
+    
+    # Step 2: Essential Apps
+    show_step "Installing essential applications..."
+    if bash "$SCRIPT_DIR/install/core/essential-apps.sh"; then
+        show_success "Essential applications installed"
+    else
+        show_error "Applications installation failed"
+        exit 1
+    fi
+    
+    # Step 3: Theme
+    show_step "Setting up WhiteSur theme..."
+    if bash "$SCRIPT_DIR/install/core/theme-setup.sh"; then
+        show_success "Theme configured"
+    else
+        show_error "Theme setup failed"
+        exit 1
+    fi
+    
+    # Step 4: GNOME
+    show_step "Configuring GNOME environment..."
+    if bash "$SCRIPT_DIR/install/core/gnome-config.sh"; then
+        show_success "GNOME configured"
+    else
+        show_error "GNOME configuration failed"
+        exit 1
+    fi
+    
+    # Step 5: Terminal
+    show_step "Configuring terminal..."
+    if bash "$SCRIPT_DIR/install/core/terminal-setup.sh"; then
+        show_success "Terminal configured"
+    else
+        show_error "Terminal setup failed"
+        exit 1
+    fi
+    
+    # Step 6: Fonts
+    show_step "Installing fonts..."
+    if bash "$SCRIPT_DIR/install/core/fonts-install.sh"; then
+        show_success "Fonts installed"
+    else
+        show_error "Fonts installation failed"
+        exit 1
+    fi
+    
+    # Step 7: UPack CLI
+    show_step "Installing UPack CLI..."
+    if bash "$SCRIPT_DIR/install/core/upack-cli.sh"; then
+        show_success "UPack CLI installed"
+    else
+        show_error "UPack CLI installation failed"
+        exit 1
+    fi
+    
+    # Success message
     echo ""
-    echo "1. 🚀 Full Installation (Recommended)"
-    echo "   - All required and optional apps"
-    echo "   - Complete desktop environment setup"
-    echo "   - Terminal and development tools"
+    echo -e "${GREEN}${BOLD}🎉 UPack setup completed successfully!${NC}"
     echo ""
+    echo -e "${CYAN}${BOLD}📋 Next steps:${NC}"
+    echo -e "${WHITE}  1. 🔄 Restart your system: ${YELLOW}sudo reboot${NC}"
+    echo -e "${WHITE}  2. 🔧 Install development tools: ${YELLOW}upack install node python${NC}"
+    echo -e "${WHITE}  3. 🎮 Install optional apps: ${YELLOW}upack install discord obs-studio${NC}"
+    echo -e "${WHITE}  4. 📊 Check system status: ${YELLOW}upack status${NC}"
+    echo ""
+    echo -e "${BLUE}${BOLD}🚀 UPack CLI Commands:${NC}"
+    echo -e "${WHITE}  ${YELLOW}upack install <app>${NC}  - Install applications or languages"
+    echo -e "${WHITE}  ${YELLOW}upack status${NC}          - Show system status"
+    echo -e "${WHITE}  ${YELLOW}upack update${NC}          - Update all apps"
+    echo -e "${WHITE}  ${YELLOW}upack --help${NC}          - Show full help"
+    echo ""
+    
+    # Ask about reboot
+    echo -e "${CYAN}${BOLD}⚡ System restart recommended to apply all changes${NC}"
+    read -p "$(echo -e "${WHITE}Restart now? [y/N]: ${NC}")" restart
+    
+    if [[ $restart =~ ^[YySs]$ ]]; then
+        echo -e "${YELLOW}🔄 Rebooting system in 3 seconds...${NC}"
+        sleep 3
+        sudo reboot
+    else
+        echo -e "${YELLOW}📝 Remember to restart later: ${WHITE}sudo reboot${NC}"
+        echo -e "${GREEN}🎯 UPack is ready to use!${NC}"
+    fi
+}
+
+# Error handling
+trap 'show_error "Setup interrupted"; exit 1' INT TERM
+
+# Run main function
+main "$@"
     echo "2. ⚡ Minimal Installation"
     echo "   - Only essential apps and configurations"
     echo "   - Faster installation"

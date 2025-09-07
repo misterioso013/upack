@@ -3,16 +3,17 @@
 # Install GNOME Extensions Manager
 # For managing GNOME shell extensions through a GUI
 
-# Use absolute path for UPack installation
-UPACK_DIR="${UPACK_DIR:-$HOME/.local/share/upack}"
-source "$UPACK_DIR/utils/gum.sh" 2>/dev/null || {
-    # Fallback log functions if gum.sh not available
-    log_step() { echo "🔄 $1"; }
-    log_info() { echo "ℹ️  $1"; }
-    log_success() { echo "✅ $1"; }
-    log_error() { echo "❌ $1"; }
-    log_warning() { echo "⚠️  $1"; }
-}
+#!/bin/bash
+
+# Install GNOME Extensions Manager
+# For managing GNOME shell extensions through a GUI
+
+# Simple log functions (no external dependencies)
+log_step() { echo "🔄 $1"; }
+log_info() { echo "ℹ️  $1"; }
+log_success() { echo "✅ $1"; }
+log_error() { echo "❌ $1"; }
+log_warning() { echo "⚠️  $1"; }
 
 install_gnome_extension_manager() {
     log_step "Installing GNOME Extensions Manager"

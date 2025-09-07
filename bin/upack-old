@@ -1,0 +1,431 @@
+#!/bin/bash
+
+# UPack CLI - Sistema de gerenciamento de aplicações
+# Inspirado no Omakub mas adaptado para UPack
+
+VERSION="1.0.0"
+# Detect repository root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+UPACK_DIR="$HOME/.local/share/upack"
+UPACK_CONFIG="$HOME/.config/upack"
+UPACK_CACHE="$HOME/.cache/upack"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+# Create necessary directories
+init_upack_dirs() {
+    mkdir -p "$UPACK_DIR"/{apps,backups,logs}
+    mkdir -p "$UPACK_CONFIG"
+    mkdir -p "$UPACK_CACHE"
+}
+
+# Show UPack banner
+show_banner() {
+    echo -e "${CYAN}${BOLD}"
+    cat << 'EOF'
+  ██╗   ██╗██████╗  █████╗  ██████╗██╗  ██╗
+  ██║   ██║██╔══██╗██╔══██╗██╔════╝██║ ██╔╝
+  ██║   ██║██████╔╝███████║██║     █████╔╝ 
+  ██║   ██║██╔═══╝ ██╔══██║██║     ██╔═██╗ 
+  ╚██████╔╝██║     ██║  ██║╚██████╗██║  ██╗
+   ╚═════╝ ╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+EOF
+    echo -e "${NC}"
+    echo -e "${BLUE}UPack System Manager v$VERSION${NC}"
+    echo -e "${WHITE}Your Ubuntu productivity environment${NC}"
+    echo ""
+}
+
+# Show help
+show_help() {
+    show_banner
+    echo -e "${YELLOW}${BOLD}Usage:${NC} upack [COMMAND] [OPTIONS]"
+    echo ""
+    echo -e "${GREEN}${BOLD}Commands:${NC}"
+    echo -e "  ${CYAN}install${NC}     Install applications and tools"
+    echo -e "  ${CYAN}update${NC}      Update system and applications"
+    echo -e "  ${CYAN}list${NC}        List installed applications"
+    echo -e "  ${CYAN}remove${NC}      Remove applications"
+    echo -e "  ${CYAN}status${NC}      Show system status"
+    echo -e "  ${CYAN}config${NC}      Configure UPack settings"
+    echo -e "  ${CYAN}backup${NC}      Backup/restore configurations"
+    echo -e "  ${CYAN}doctor${NC}      Check system health"
+    echo -e "  ${CYAN}gui${NC}         Open UPack GUI"
+    echo ""
+    echo -e "${GREEN}${BOLD}System Commands:${NC}"
+    echo -e "  ${CYAN}terminal${NC}    Configure terminal settings"
+    echo -e "  ${CYAN}hotkeys${NC}     Configure GNOME hotkeys"
+    echo -e "  ${CYAN}theme${NC}       Apply themes"
+    echo -e "  ${CYAN}extensions${NC}  Manage GNOME extensions"
+    echo ""
+    echo -e "${GREEN}${BOLD}Monitoring:${NC}"
+    echo -e "  ${CYAN}monitor${NC}     Open system monitor (btop)"
+    echo -e "  ${CYAN}activity${NC}    Show system activity"
+    echo ""
+    echo -e "${GREEN}${BOLD}Examples:${NC}"
+    echo -e "  ${WHITE}upack install discord vscode${NC}"
+    echo -e "  ${WHITE}upack update${NC}"
+    echo -e "  ${WHITE}upack list --installed${NC}"
+    echo -e "  ${WHITE}upack config terminal${NC}"
+    echo -e "  ${WHITE}upack monitor${NC}"
+    echo ""
+    echo -e "${YELLOW}For more help: ${CYAN}upack [command] --help${NC}"
+}
+
+# Log function
+log() {
+    local level="$1"
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    
+    echo "[$timestamp] [$level] $message" >> "$UPACK_DIR/logs/upack.log"
+    
+    case "$level" in
+        ERROR) echo -e "${RED}❌ $message${NC}" ;;
+        SUCCESS) echo -e "${GREEN}✅ $message${NC}" ;;
+        INFO) echo -e "${BLUE}ℹ️  $message${NC}" ;;
+        WARNING) echo -e "${YELLOW}⚠️  $message${NC}" ;;
+        *) echo "$message" ;;
+    esac
+}
+
+# Install applications
+cmd_install() {
+    local apps=("$@")
+    
+    if [ ${#apps[@]} -eq 0 ]; then
+        echo -e "${YELLOW}Usage: upack install [APP1] [APP2] ...${NC}"
+        echo ""
+        echo -e "${GREEN}Available categories:${NC}"
+        echo -e "  ${CYAN}essential${NC}   - Essential development tools"
+        echo -e "  ${CYAN}media${NC}       - Media and entertainment"
+        echo -e "  ${CYAN}dev${NC}         - Development tools"
+        echo -e "  ${CYAN}games${NC}       - Games and emulators"
+        echo -e "  ${CYAN}terminal${NC}    - Terminal configuration"
+        echo -e "  ${CYAN}themes${NC}      - Themes and appearance"
+        return 1
+    fi
+    
+    log "INFO" "Installing applications: ${apps[*]}"
+    
+    for app in "${apps[@]}"; do
+        install_app "$app"
+    done
+}
+
+# Install individual app
+install_app() {
+    local app="$1"
+    local app_script=""
+    
+    # Find the app script
+    if [ -f "${REPO_ROOT}/install/apps/required/${app}.sh" ]; then
+        app_script="${REPO_ROOT}/install/apps/required/${app}.sh"
+    elif [ -f "${REPO_ROOT}/install/apps/optional/${app}.sh" ]; then
+        app_script="${REPO_ROOT}/install/apps/optional/${app}.sh"
+    else
+        case "$app" in
+            "essential"|"dev")
+                log "INFO" "Installing essential development tools..."
+                bash "${REPO_ROOT}/core/required.sh"
+                return $?
+                ;;
+            "media")
+                log "INFO" "Installing media applications..."
+                bash "${REPO_ROOT}/install/apps/optional/vlc.sh"
+                return $?
+                ;;
+            "terminal")
+                log "INFO" "Configuring terminal..."
+                bash "${REPO_ROOT}/config/terminal/terminal-menu.sh"
+                return $?
+                ;;
+            "themes")
+                log "INFO" "Installing themes..."
+                bash "${REPO_ROOT}/install/theme.sh"
+                return $?
+                ;;
+            *)
+                log "ERROR" "Unknown application: $app"
+                return 1
+                ;;
+        esac
+    fi
+    
+    if [ -n "$app_script" ]; then
+        log "INFO" "Installing $app..."
+        if bash "$app_script"; then
+            log "SUCCESS" "$app installed successfully"
+            echo "$app" >> "$UPACK_DIR/apps/installed.txt"
+        else
+            log "ERROR" "Failed to install $app"
+            return 1
+        fi
+    fi
+}
+
+# Update system
+cmd_update() {
+    log "INFO" "Updating system and applications..."
+    
+    echo -e "${CYAN}🔄 Updating package repositories...${NC}"
+    sudo apt update
+    
+    echo -e "${CYAN}🔄 Upgrading system packages...${NC}"
+    sudo apt upgrade -y
+    
+    echo -e "${CYAN}🔄 Updating Flatpak applications...${NC}"
+    if command -v flatpak &> /dev/null; then
+        flatpak update -y
+    fi
+    
+    echo -e "${CYAN}🔄 Updating Snap packages...${NC}"
+    if command -v snap &> /dev/null; then
+        sudo snap refresh
+    fi
+    
+    echo -e "${CYAN}🔄 Cleaning up...${NC}"
+    sudo apt autoremove -y
+    sudo apt autoclean
+    
+    log "SUCCESS" "System updated successfully"
+}
+
+# List applications
+cmd_list() {
+    local option="$1"
+    
+    case "$option" in
+        "--installed"|"-i")
+            log "INFO" "Listing installed UPack applications..."
+            if [ -f "$UPACK_DIR/apps/installed.txt" ]; then
+                echo -e "${GREEN}📦 Installed UPack Applications:${NC}"
+                cat "$UPACK_DIR/apps/installed.txt" | sort | sed 's/^/  ✅ /'
+            else
+                echo -e "${YELLOW}No UPack applications tracked yet${NC}"
+            fi
+            ;;
+        "--available"|"-a")
+            log "INFO" "Listing available applications..."
+            echo -e "${GREEN}📦 Available Applications:${NC}"
+            echo ""
+            echo -e "${CYAN}Required Tools:${NC}"
+            find install/apps/required -name "*.sh" -exec basename {} .sh \; | sort | sed 's/^/  📦 /'
+            echo ""
+            echo -e "${CYAN}Optional Applications:${NC}"
+            find install/apps/optional -name "*.sh" -exec basename {} .sh \; | sort | sed 's/^/  📦 /'
+            ;;
+        *)
+            echo -e "${YELLOW}Usage: upack list [--installed|--available]${NC}"
+            ;;
+    esac
+}
+
+# Show system status
+cmd_status() {
+    show_banner
+    
+    echo -e "${GREEN}${BOLD}🖥️  System Information:${NC}"
+    echo "  OS: $(lsb_release -d | cut -f2)"
+    echo "  Kernel: $(uname -r)"
+    echo "  Desktop: $XDG_CURRENT_DESKTOP"
+    echo "  Shell: $SHELL"
+    echo ""
+    
+    echo -e "${GREEN}${BOLD}💾 Storage:${NC}"
+    df -h / | tail -n 1 | awk '{printf "  Root: %s used of %s (%s)\n", $3, $2, $5}'
+    df -h /home 2>/dev/null | tail -n 1 | awk '{printf "  Home: %s used of %s (%s)\n", $3, $2, $5}' || echo "  Home: Same as root"
+    echo ""
+    
+    echo -e "${GREEN}${BOLD}🧠 Memory:${NC}"
+    free -h | awk '/^Mem:/ {printf "  RAM: %s used of %s\n", $3, $2}'
+    echo ""
+    
+    echo -e "${GREEN}${BOLD}📦 Package Managers:${NC}"
+    echo "  APT: $(dpkg -l | grep -c ^ii) packages installed"
+    if command -v flatpak &> /dev/null; then
+        echo "  Flatpak: $(flatpak list --app | wc -l) applications"
+    fi
+    if command -v snap &> /dev/null; then
+        echo "  Snap: $(snap list | tail -n +2 | wc -l) packages"
+    fi
+    echo ""
+    
+    if [ -f "$UPACK_DIR/apps/installed.txt" ]; then
+        echo -e "${GREEN}${BOLD}🎯 UPack Applications:${NC}"
+        echo "  Installed: $(wc -l < "$UPACK_DIR/apps/installed.txt") applications"
+    fi
+}
+
+# Open system monitor
+cmd_monitor() {
+    log "INFO" "Opening system monitor..."
+    
+    if command -v btop &> /dev/null; then
+        # Use btop if available with UPack config
+        if [ -f "$HOME/.config/alacritty/btop.toml" ]; then
+            alacritty --config-file "$HOME/.config/alacritty/btop.toml" --class="UPack-Monitor" --title="UPack System Monitor" -e btop
+        else
+            btop
+        fi
+    elif command -v htop &> /dev/null; then
+        htop
+    else
+        log "ERROR" "No system monitor available. Install btop or htop first."
+        echo -e "${CYAN}Install with: upack install btop${NC}"
+        return 1
+    fi
+}
+
+# Open UPack GUI
+cmd_gui() {
+    log "INFO" "Opening UPack GUI..."
+    
+    if [ -f "$HOME/.local/share/applications/UPack.desktop" ]; then
+        if command -v alacritty &> /dev/null && [ -f "$HOME/.config/alacritty/pane.toml" ]; then
+            alacritty --config-file "$HOME/.config/alacritty/pane.toml" --class="UPack" --title="UPack Manager" -e upack-tui
+        else
+            gnome-terminal -- bash -c "upack-tui; exec bash"
+        fi
+    else
+        log "ERROR" "UPack GUI not installed. Run 'upack install upack-gui' first"
+        return 1
+    fi
+}
+
+# Configure terminal
+cmd_terminal() {
+    log "INFO" "Opening terminal configuration..."
+    bash "$REPO_ROOT/config/terminal/terminal-menu.sh"
+}
+
+# Configure hotkeys
+cmd_hotkeys() {
+    log "INFO" "Opening hotkeys configuration..."
+    bash "$REPO_ROOT/config/gnome/hotkeys-menu.sh"
+}
+
+# Configure themes
+cmd_theme() {
+    log "INFO" "Opening theme configuration..."
+    bash "$REPO_ROOT/install/theme.sh"
+}
+
+# Doctor - Check system health
+cmd_doctor() {
+    log "INFO" "Running system health check..."
+    
+    echo -e "${GREEN}${BOLD}🏥 UPack System Health Check${NC}"
+    echo ""
+    
+    local issues=0
+    
+    # Check required tools
+    echo -e "${CYAN}Checking required tools...${NC}"
+    local tools=("git" "curl" "wget" "gum")
+    for tool in "${tools[@]}"; do
+        if command -v "$tool" &> /dev/null; then
+            echo -e "  ✅ $tool"
+        else
+            echo -e "  ❌ $tool (missing)"
+            ((issues++))
+        fi
+    done
+    
+    # Check GNOME extensions
+    if command -v gnome-extensions &> /dev/null; then
+        echo -e "${CYAN}Checking GNOME extensions...${NC}"
+        local enabled_count=$(gnome-extensions list --enabled | wc -l)
+        echo -e "  ✅ $enabled_count extensions enabled"
+    fi
+    
+    # Check UPack directories
+    echo -e "${CYAN}Checking UPack directories...${NC}"
+    for dir in "$UPACK_DIR" "$UPACK_CONFIG" "$UPACK_CACHE"; do
+        if [ -d "$dir" ]; then
+            echo -e "  ✅ $dir"
+        else
+            echo -e "  ⚠️  $dir (will be created)"
+            mkdir -p "$dir"
+        fi
+    done
+    
+    echo ""
+    if [ $issues -eq 0 ]; then
+        log "SUCCESS" "System health check passed! 🎉"
+    else
+        log "WARNING" "$issues issues found. Run 'upack install essential' to fix common issues."
+    fi
+}
+
+# Main command dispatcher
+main() {
+    init_upack_dirs
+    
+    local command="$1"
+    shift
+    
+    case "$command" in
+        "install"|"add")
+            cmd_install "$@"
+            ;;
+        "update"|"upgrade")
+            cmd_update "$@"
+            ;;
+        "list"|"ls")
+            cmd_list "$@"
+            ;;
+        "remove"|"rm")
+            log "ERROR" "Remove functionality not implemented yet"
+            ;;
+        "status"|"info")
+            cmd_status "$@"
+            ;;
+        "monitor"|"htop"|"btop")
+            cmd_monitor "$@"
+            ;;
+        "gui"|"app")
+            cmd_gui "$@"
+            ;;
+        "terminal")
+            cmd_terminal "$@"
+            ;;
+        "hotkeys")
+            cmd_hotkeys "$@"
+            ;;
+        "theme")
+            cmd_theme "$@"
+            ;;
+        "doctor"|"health")
+            cmd_doctor "$@"
+            ;;
+        "help"|"--help"|"-h")
+            show_help
+            ;;
+        "version"|"--version"|"-v")
+            echo "UPack v$VERSION"
+            ;;
+        "")
+            show_help
+            ;;
+        *)
+            log "ERROR" "Unknown command: $command"
+            echo -e "${YELLOW}Run 'upack help' for available commands${NC}"
+            exit 1
+            ;;
+    esac
+}
+
+# Execute main function
+main "$@"

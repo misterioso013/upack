@@ -18,16 +18,7 @@ BOLD='\033[1m'
 NC='\033[0m'
 
 # Import common functions
-if [ -f "$UPACK_ROOT/install/core/common-functions.sh" ]; then
-    source "$UPACK_ROOT/install/core/common-functions.sh"
-else
-    # Fallback functions if common-functions.sh is not available
-    show_step() { echo -e "\033[0;34m\033[1m[$(date +'%H:%M:%S')] $1\033[0m"; }
-    show_success() { echo -e "\033[0;32m✅ $1\033[0m"; }
-    show_error() { echo -e "\033[0;31m❌ $1\033[0m"; }
-    show_info() { echo -e "\033[0;33mℹ️  $1\033[0m"; }
-    command_exists() { command -v "$1" >/dev/null 2>&1; }
-fi
+source "$UPACK_ROOT/install/core/common-functions.sh"
 
 # Show CLI banner
 show_cli_banner() {

@@ -63,6 +63,11 @@ This automatically downloads and runs UPack from a temporary location.
 ### 🤖 Smart CLI Management
 After setup, manage your system with the intelligent UPack CLI:
 ```bash
+# Development setup
+upack git               # Complete Git & GitHub SSH setup
+upack git config        # Configure Git user settings only
+upack git ssh           # Setup GitHub SSH key only
+
 # Install development languages
 upack install node python rust
 
@@ -75,15 +80,17 @@ upack update    # Update everything
 upack --help    # See all commands
 ```
 
-## 🖥️ Desktop Applications
+## � Development Tools Integration
 
-UPack includes desktop launchers that are automatically added to your dock:
-
-- **UPack Manager**: System status and management GUI
-- **SendAny**: Quick file sharing service
-- Search for them in your Applications menu or find them in the dock
-
-## 🛠️ Development Ready
+### Git & GitHub Setup
+UPack makes development setup effortless:
+```bash
+upack git               # One command configures everything:
+                        # - Git user name and email
+                        # - SSH key generation
+                        # - GitHub SSH key setup
+                        # - Connection testing
+```
 
 ### Programming Languages (via CLI)
 ```bash

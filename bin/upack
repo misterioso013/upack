@@ -76,6 +76,11 @@ show_help() {
     echo -e "  ${WHITE}upack install docker${NC}      Install Docker (coming soon)"
     echo -e "  ${WHITE}upack install btop${NC}        Install system monitor"
     echo ""
+    echo -e "${YELLOW}DEVELOPMENT:${NC}"
+    echo -e "  ${WHITE}upack git${NC}                 Configure Git and GitHub SSH"
+    echo -e "  ${WHITE}upack git config${NC}          Configure Git user settings only"
+    echo -e "  ${WHITE}upack git ssh${NC}             Configure GitHub SSH key only"
+    echo ""
     echo -e "${YELLOW}MANAGEMENT:${NC}"
     echo -e "  ${WHITE}upack status${NC}              Show installed packages and languages"
     echo -e "  ${WHITE}upack update${NC}              Update all managed packages"
@@ -88,6 +93,7 @@ show_help() {
     echo -e "${CYAN}Examples:${NC}"
     echo -e "  ${WHITE}upack install node python${NC}    Install multiple languages"
     echo -e "  ${WHITE}upack install discord obs${NC}     Install multiple apps"
+    echo -e "  ${WHITE}upack git${NC}                     Setup Git and GitHub SSH"
     echo ""
 }
 
@@ -191,6 +197,33 @@ handle_install() {
 show_status() {
     show_cli_banner
     echo -e "${YELLOW}System Status:${NC}"
+    echo ""
+    
+    # Check Git configuration
+    echo -e "${BLUE}Development:${NC}"
+    if command_exists git; then
+        local git_version=$(git --version 2>/dev/null | cut -d' ' -f3 || echo "unknown")
+        local git_name=$(git config --global user.name 2>/dev/null || echo "not set")
+        local git_email=$(git config --global user.email 2>/dev/null || echo "not set")
+        
+        echo -e "  ${GREEN}✅ Git${NC} $git_version"
+        
+        if [[ "$git_name" != "not set" && "$git_email" != "not set" ]]; then
+            echo -e "     ${WHITE}User:${NC} $git_name <$git_email>"
+            
+            # Check SSH key
+            if [[ -f "$HOME/.ssh/id_rsa" ]]; then
+                echo -e "     ${GREEN}✅ SSH Key${NC} configured"
+            else
+                echo -e "     ${YELLOW}⚠️  SSH Key${NC} not found"
+            fi
+        else
+            echo -e "     ${YELLOW}⚠️  Not configured${NC} (run: upack git)"
+        fi
+    else
+        echo -e "  ${RED}❌ Git${NC} not installed"
+    fi
+    
     echo ""
     
     # Check languages
@@ -315,12 +348,104 @@ update_packages() {
     show_success "All packages updated successfully"
 }
 
+# Ensure gum is installed
+ensure_gum() {
+    if ! command_exists gum; then
+        show_step "Installing gum (CLI interaction tool)..."
+        if bash "$UPACK_ROOT/utils/gum.sh"; then
+            show_success "gum installed successfully"
+        else
+            show_error "Failed to install gum"
+            return 1
+        fi
+    fi
+}
+
+# Configure Git settings
+configure_git() {
+    show_cli_banner
+    echo -e "${YELLOW}🔧 Git Configuration${NC}"
+    echo ""
+    
+    # Ensure gum is available
+    ensure_gum || return 1
+    
+    # Run Git configuration script
+    if [[ -f "$UPACK_ROOT/utils/git.sh" ]]; then
+        bash "$UPACK_ROOT/utils/git.sh"
+    else
+        show_error "Git configuration script not found"
+        return 1
+    fi
+}
+
+# Configure GitHub SSH
+configure_github_ssh() {
+    show_cli_banner
+    echo -e "${YELLOW}🔐 GitHub SSH Configuration${NC}"
+    echo ""
+    
+    # Ensure gum is available
+    ensure_gum || return 1
+    
+    # Run GitHub SSH configuration script
+    if [[ -f "$UPACK_ROOT/config/github/ssh-config.sh" ]]; then
+        bash "$UPACK_ROOT/config/github/ssh-config.sh"
+    else
+        show_error "GitHub SSH configuration script not found"
+        return 1
+    fi
+}
+
+# Handle git command
+handle_git() {
+    local subcommand="${1:-}"
+    
+    case "$subcommand" in
+        "config")
+            configure_git
+            ;;
+        "ssh")
+            configure_github_ssh
+            ;;
+        "")
+            # Full Git setup - both config and SSH
+            show_cli_banner
+            echo -e "${YELLOW}🚀 Complete Git & GitHub Setup${NC}"
+            echo ""
+            
+            show_step "Step 1: Configuring Git user settings..."
+            configure_git || return 1
+            
+            echo ""
+            show_step "Step 2: Setting up GitHub SSH key..."
+            configure_github_ssh || return 1
+            
+            echo ""
+            show_success "🎉 Git and GitHub are fully configured!"
+            echo -e "${CYAN}You can now use Git with GitHub via SSH authentication${NC}"
+            ;;
+        *)
+            show_error "Unknown git subcommand: $subcommand"
+            echo -e "${WHITE}Available commands:${NC}"
+            echo -e "  ${CYAN}upack git${NC}        - Complete Git and GitHub setup"
+            echo -e "  ${CYAN}upack git config${NC} - Configure Git user settings only"
+            echo -e "  ${CYAN}upack git ssh${NC}    - Configure GitHub SSH key only"
+            return 1
+            ;;
+    esac
+}
+
 # Main function
 main() {
     case "${1:-}" in
         "install")
             shift
             handle_install "$@"
+            ;;
+        "git")
+            shift
+            handle_git "$@"
             ;;
         "status")
             show_status

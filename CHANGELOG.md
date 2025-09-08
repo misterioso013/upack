@@ -1,3 +1,29 @@
+# 📋 UPack v2.0.1 - Git Integration & Bug Fixes
+
+## 🚀 Release: September 8, 2025
+
+### ✨ New Features
+
+#### 🔧 Git Integration in CLI
+- **`upack git`** - Complete Git and GitHub SSH setup
+- **`upack git config`** - Configure Git user settings only  
+- **`upack git ssh`** - Configure GitHub SSH key only
+- **Enhanced status** - Shows Git configuration in `upack status`
+- **Automatic gum installation** - Interactive UI tool installed on demand
+
+#### 🐛 Critical Bug Fixes
+- **Fixed GNOME extensions** - Restored missing `gnome-extensions.sh` file
+- **Corrected dependencies** - Fixed import paths in extension scripts
+- **Validation passed** - All setup scripts now pass validation tests
+
+### 🔧 Technical Improvements
+- Integrated existing Git utility scripts into CLI
+- Added development tools section to help menu
+- Enhanced status reporting for development tools
+- Improved error handling for missing dependencies
+
+---
+
 # 📋 UPack v2.0.0 - Complete System Restructuring
 
 ## 🚀 Major Release: September 7, 2025

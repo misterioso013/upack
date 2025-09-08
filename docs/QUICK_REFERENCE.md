@@ -5,7 +5,9 @@
 ## 🚀 Express Installation
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/install.sh | bash
+git clone https://github.com/misterioso013/upack.git
+cd upack  
+./setup.sh
 ```
 
 ---

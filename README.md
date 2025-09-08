@@ -18,7 +18,6 @@ cd upack
 ## ✨ What You Get
 
 ### 🎨 Beautiful Desktop
-### 🎨 Beautiful Desktop
 - **WhiteSur Theme**: Elegant macOS-inspired design
 - **GNOME Extensions**: Curated productivity extensions
 - **Custom Hotkeys**: Keyboard-driven workflow
@@ -276,6 +275,12 @@ cd upack
 ```
 
 **Just one command. Zero complexity. Maximum productivity.** ☕
+
+## 📚 Documentation
+
+- **[📖 Complete Guide](docs/COMPLETE_GUIDE.md)** - Detailed documentation with examples and tutorials
+- **[⚡ Quick Reference](docs/QUICK_REFERENCE.md)** - Essential commands and shortcuts for daily use  
+- **[📋 Changelog](CHANGELOG.md)** - Version history and release notes
 
 ---
 

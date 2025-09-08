@@ -28,9 +28,9 @@ Version=1.0
 Type=Application
 Name=UPack Manager
 Comment=Ubuntu Productivity Pack Manager - System Setup and Management
-Exec=$HOME/.local/bin/upack status
+Exec=gnome-terminal --title="UPack Manager" -- bash -c "upack status; echo ''; echo 'Commands: upack --help | Press Enter to continue...'; read"
 Icon=$UPACK_HOME/assets/icons/upack.png
-Terminal=true
+Terminal=false
 Categories=System;Settings;PackageManager;
 Keywords=upack;ubuntu;productivity;manager;setup;install;
 StartupNotify=true

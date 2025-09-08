@@ -22,8 +22,15 @@ UPack is the ultimate solution to transform your fresh Ubuntu installation into 
 
 ## 🎯 Quick Installation
 
-### Quick Installation
+## 🎯 Quick Installation
 
+### Method 1: Ultra-Simple Bootstrap (Recommended for beginners)
+```bash
+curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/boot.sh | bash
+```
+This automatically handles everything - downloads UPack to a temporary location and runs it.
+
+### Method 2: Manual Clone (Recommended for developers)
 ```bash
 git clone https://github.com/misterioso013/upack.git
 cd upack

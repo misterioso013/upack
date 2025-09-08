@@ -4,6 +4,12 @@
 
 ## 🚀 Express Installation
 
+### Ultra-Simple (One Command)
+```bash
+curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/boot.sh | bash
+```
+
+### Manual Method
 ```bash
 git clone https://github.com/misterioso013/upack.git
 cd upack  

@@ -13,6 +13,13 @@ cd upack
 ./setup.sh
 ```
 
+### 🚀 Ultra-Simple Bootstrap (Even Easier!)
+For the absolute simplest experience, use our bootstrap script:
+```bash
+curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/boot.sh | bash
+```
+This automatically downloads and runs UPack from a temporary location.
+
 **That's it!** ☕ Grab a coffee and come back to a fully configured Ubuntu system in 10-15 minutes.
 
 ## 📸 Screenshots

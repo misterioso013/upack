@@ -89,7 +89,7 @@ configure_gsettings() {
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
         
         # Set icon theme
-        gsettings set org.gnome.desktop.interface icon-theme 'Nordzy-dark' 2>/dev/null || true
+        gsettings set org.gnome.desktop.interface icon-theme 'Nordzy--dark_panel' 2>/dev/null || true
         
         # Set cursor theme
         gsettings set org.gnome.desktop.interface cursor-theme 'Sunity-cursors' 2>/dev/null || true

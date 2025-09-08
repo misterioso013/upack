@@ -45,9 +45,9 @@ run_installation_steps() {
     local steps=(
         "dependencies.sh:Installing essential dependencies"
         "essential-apps.sh:Installing essential applications" 
-        "theme-install.sh:Setting up WhiteSur theme"
+        "theme-setup.sh:Setting up WhiteSur theme"
         "gnome-config.sh:Configuring GNOME environment"
-        "terminal-config.sh:Configuring terminal"
+        "terminal-setup.sh:Configuring terminal"
         "fonts-install.sh:Installing fonts"
         "cli-install.sh:Installing UPack CLI"
         "infrastructure.sh:Setting up permanent infrastructure"

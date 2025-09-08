@@ -1,0 +1,71 @@
+name: 📚 Documentation Issue
+description: Report an issue with documentation or suggest improvements
+title: "[Docs] "
+labels: ["documentation", "needs-review"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Please describe the issue or suggestion.
+
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: Documentation Type
+      description: Which documentation needs attention?
+      options:
+        - README.md
+        - Complete Guide (docs/COMPLETE_GUIDE.md)
+        - Quick Reference (docs/QUICK_REFERENCE.md)
+        - Changelog (CHANGELOG.md)
+        - Code comments
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Issue Type
+      description: What kind of documentation issue is this?
+      options:
+        - Incorrect information
+        - Missing information
+        - Unclear/confusing explanation
+        - Outdated content
+        - Typo/grammar
+        - Formatting issue
+        - Suggestion for improvement
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Issue Description
+      description: Describe the documentation issue in detail
+      placeholder: "Example: The installation instructions in the README don't mention the sudo requirement..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_content
+    attributes:
+      label: Current Content (if applicable)
+      description: Quote the current text that needs to be changed
+      placeholder: "Copy and paste the current text here..."
+
+  - type: textarea
+    id: suggested_content
+    attributes:
+      label: Suggested Content
+      description: What should the content say instead?
+      placeholder: "Provide your suggested text or improvement..."
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any additional context about this documentation issue
+      placeholder: "Why is this important? Who would benefit from this change?"

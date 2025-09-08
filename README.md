@@ -15,6 +15,28 @@ cd upack
 
 **That's it!** ☕ Grab a coffee and come back to a fully configured Ubuntu system in 10-15 minutes.
 
+## 📸 Screenshots
+
+<table>
+<tr>
+<td align="center">
+<strong>🖥️ Beautiful Desktop</strong><br/>
+<img src="docs/Screenshots/desktop-overview.png" width="300px" alt="UPack Desktop Overview"/>
+<br/>WhiteSur theme with GNOME extensions
+</td>
+<td align="center">
+<strong>📱 Applications Menu</strong><br/>
+<img src="docs/Screenshots/applications-menu.png" width="300px" alt="Applications Menu"/>
+<br/>All essential apps pre-installed
+</td>
+<td align="center">
+<strong>💻 Terminal Setup</strong><br/>
+<img src="docs/Screenshots/terminal-setup.png" width="300px" alt="Terminal Setup"/>
+<br/>Customized bash with colors and fonts
+</td>
+</tr>
+</table>
+
 ## ✨ What You Get
 
 ### 🎨 Beautiful Desktop
@@ -275,6 +297,23 @@ cd upack
 ```
 
 **Just one command. Zero complexity. Maximum productivity.** ☕
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Whether you want to:
+
+- 🐛 **Report bugs** or suggest improvements
+- ✨ **Add new features** or applications  
+- 📚 **Improve documentation**
+- 🧪 **Help with testing**
+
+Check out our **[Contributing Guide](CONTRIBUTING.md)** for detailed information on how to get started.
+
+### Quick Links
+- **[🐛 Report a Bug](https://github.com/misterioso013/upack/issues/new?template=bug_report.yml)**
+- **[✨ Request a Feature](https://github.com/misterioso013/upack/issues/new?template=feature_request.yml)**
+- **[📚 Documentation Issue](https://github.com/misterioso013/upack/issues/new?template=documentation.yml)**
+- **[❓ Ask a Question](https://github.com/misterioso013/upack/issues/new?template=question.yml)**
 
 ## 📚 Documentation
 

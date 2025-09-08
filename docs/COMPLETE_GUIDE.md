@@ -77,6 +77,32 @@ cd upack
 - **Git**: Automatic SSH configuration
 - **GNOME**: Productivity-optimized settings
 
+## 📸 Visual Preview
+
+See what your Ubuntu system will look like after UPack installation:
+
+<table>
+<tr>
+<td align="center" colspan="3">
+<strong>🖥️ Complete Desktop Experience</strong>
+</td>
+</tr>
+<tr>
+<td align="center">
+<img src="Screenshots/desktop-overview.png" width="300px" alt="UPack Desktop Overview"/>
+<br/><em>Beautiful WhiteSur theme with GNOME extensions</em>
+</td>
+<td align="center">
+<img src="Screenshots/applications-menu.png" width="300px" alt="Applications Menu"/>
+<br/><em>All essential applications pre-installed</em>
+</td>
+<td align="center">
+<img src="Screenshots/terminal-setup.png" width="300px" alt="Terminal Setup"/>
+<br/><em>Customized terminal with colors and productivity features</em>
+</td>
+</tr>
+</table>
+
 ---
 
 ## 🎛️ Installation Modes

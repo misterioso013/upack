@@ -1,0 +1,111 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for UPack
+title: "[Feature] "
+labels: ["enhancement", "needs-discussion"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please fill out this form to help us understand your request.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting your feature request
+      options:
+        - label: I have searched existing issues to ensure this feature hasn't been requested already
+          required: true
+        - label: This feature aligns with UPack's philosophy of "Format → Clone → Run → Done"
+          required: true
+
+  - type: dropdown
+    id: feature_category
+    attributes:
+      label: Feature Category
+      description: What category does this feature belong to?
+      options:
+        - Desktop Theme/Appearance
+        - Application Installation
+        - System Configuration
+        - UPack CLI Enhancement
+        - Developer Tools
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: "Example: Add support for installing and configuring Docker with development containers..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why would this feature be useful? What problem does it solve?
+      placeholder: "Example: Many developers need Docker for containerized development, and setting it up manually is time-consuming..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: How do you envision this feature working?
+      placeholder: "Example: Add a new `upack install docker` command that installs Docker, adds user to docker group, and configures dev containers..."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: "Example: Manual Docker installation, using Docker Desktop, etc..."
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve my workflow
+        - High - Essential for my use case
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Implementation Complexity (Your Opinion)
+      description: How complex do you think implementing this feature would be?
+      options:
+        - Simple - Small script addition
+        - Medium - Moderate changes needed
+        - Complex - Major feature requiring significant work
+        - Unknown - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Any additional information, screenshots, or context about the feature request
+      placeholder: "Links to relevant documentation, examples from other tools, etc..."
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be interested in contributing to this feature?
+      options:
+        - label: I would be willing to help implement this feature
+        - label: I would be willing to test this feature
+        - label: I would be willing to help with documentation

@@ -1,0 +1,73 @@
+name: ❓ Question/Support
+description: Ask a question or get help with UPack
+title: "[Question] "
+labels: ["question", "support"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Need help with UPack? Please fill out this form and we'll do our best to help!
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm you've checked these resources first
+      options:
+        - label: I have read the README.md
+        - label: I have checked the Complete Guide (docs/COMPLETE_GUIDE.md)
+        - label: I have searched existing issues for similar questions
+        - label: I have tried the Quick Reference (docs/QUICK_REFERENCE.md)
+
+  - type: dropdown
+    id: question_category
+    attributes:
+      label: Question Category
+      description: What is your question about?
+      options:
+        - Installation issues
+        - Configuration/Customization
+        - UPack CLI usage
+        - Application-specific questions
+        - Theme/Appearance
+        - Keyboard shortcuts
+        - Development tools
+        - General usage
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know?
+      placeholder: "Example: How do I change the terminal color scheme after installation?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide any relevant context about your setup or what you're trying to achieve
+      placeholder: "Example: I'm using Ubuntu 22.04, installed UPack yesterday, and now I want to customize..."
+
+  - type: textarea
+    id: attempted_solutions
+    attributes:
+      label: What Have You Tried?
+      description: What steps have you already taken to solve this?
+      placeholder: "Example: I tried looking in GNOME settings, checked the terminal preferences..."
+
+  - type: textarea
+    id: system_info
+    attributes:
+      label: System Information (if relevant)
+      description: Provide system info if it might be related to your question
+      placeholder: |
+        - Ubuntu version:
+        - UPack version:
+        - Output of `upack status`:
+        - etc.

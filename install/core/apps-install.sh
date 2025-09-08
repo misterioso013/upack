@@ -83,21 +83,33 @@ update_dock_favorites() {
     declare -a new_apps=(
         "upack-manager.desktop"
         "sendany.desktop"
+        "org.gnome.Terminal.desktop"
+        "google-chrome.desktop"
+        "org.gnome.Calculator.desktop"
+        "org.gnome.SystemMonitor.desktop"
+        "org.gnome.Nautilus.desktop"
+        "typora.desktop"
+        "com.github.xournalpp.xournalpp.desktop"
+        "org.gnome.Settings.desktop"
+        "code.desktop"
     )
     
     # Check and add each new app
     for app in "${new_apps[@]}"; do
-        # Check if app exists
-        if [ -f "$HOME/.local/share/applications/$app" ]; then
+        # Check if app exists in system applications or user applications
+        if [ -f "/usr/share/applications/$app" ] || [ -f "$HOME/.local/share/applications/$app" ]; then
+            # Get current favorites to check
+            current_check=$(gsettings get org.gnome.shell favorite-apps 2>/dev/null || echo "[]")
+            
             # Check if app is already in favorites
-            if [[ "$current_favorites" != *"$app"* ]]; then
+            if [[ "$current_check" != *"$app"* ]]; then
                 # Add to favorites
-                if [ "$current_favorites" = "[]" ]; then
+                if [ "$current_check" = "[]" ]; then
                     # First app
                     gsettings set org.gnome.shell favorite-apps "['$app']"
                 else
                     # Append to existing list
-                    new_favorites=$(echo "$current_favorites" | sed "s/]/,'$app']/")
+                    new_favorites=$(echo "$current_check" | sed "s/]/,'$app']/")
                     gsettings set org.gnome.shell favorite-apps "$new_favorites"
                 fi
                 log_info "Added $app to dock"
@@ -105,7 +117,7 @@ update_dock_favorites() {
                 log_info "$app already in dock"
             fi
         else
-            log_info "$app not found, skipping"
+            log_info "$app not installed, skipping dock addition"
         fi
     done
     
@@ -133,8 +145,14 @@ main() {
     echo "  • UPack Manager - System management interface"
     echo "  • SendAny - Quick file sharing service"
     echo ""
+    echo "🎯 Dock updated with essential applications:"
+    echo "  • Terminal, Chrome, VS Code"
+    echo "  • Files, Typora, Xournal++"
+    echo "  • Calculator, Settings"
+    echo "  • UPack Manager, SendAny"
+    echo ""
     echo "🎯 Applications are now available in:"
-    echo "  • Applications menu (search for 'UPack' or 'SendAny')"
+    echo "  • Applications menu (search for app names)"
     echo "  • Dock favorites (pinned automatically)"
     echo "  • Command line: upack status"
     echo ""

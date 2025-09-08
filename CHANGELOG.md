@@ -14,6 +14,8 @@
 #### 🐛 Critical Bug Fixes
 - **Fixed GNOME extensions** - Restored missing `gnome-extensions.sh` file
 - **Corrected dependencies** - Fixed import paths in extension scripts
+- **Dock application names** - Corrected `.desktop` filenames for essential apps
+- **Improved dock logic** - Prevents duplicates, checks both system and user app paths
 - **Validation passed** - All setup scripts now pass validation tests
 
 ### 🔧 Technical Improvements

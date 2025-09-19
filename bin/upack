@@ -73,7 +73,7 @@ show_help() {
     echo -e "${YELLOW}APPLICATIONS:${NC}"
     echo -e "  ${WHITE}upack install discord${NC}     Install Discord"
     echo -e "  ${WHITE}upack install obs-studio${NC}  Install OBS Studio"
-    echo -e "  ${WHITE}upack install docker${NC}      Install Docker (coming soon)"
+    echo -e "  ${WHITE}upack install docker${NC}      Install Docker Desktop"
     echo -e "  ${WHITE}upack install btop${NC}        Install system monitor"
     echo -e "  ${WHITE}upack install typora${NC}      Install Typora (Markdown editor)"
     echo ""
@@ -155,9 +155,12 @@ install_app() {
         "terminal-config")
             script_path="$UPACK_ROOT/install/apps/optional/terminal-config.sh"
             ;;
+        "docker")
+            script_path="$UPACK_ROOT/install/apps/optional/docker.sh"
+            ;;
         *)
             show_error "Application '$app' not supported yet"
-            show_info "Available apps: discord, obs-studio, btop, typora, tlauncher, dev-tools, terminal-config"
+            show_info "Available apps: discord, obs-studio, btop, typora, tlauncher, dev-tools, terminal-config, docker"
             return 1
             ;;
     esac
@@ -326,7 +329,7 @@ list_packages() {
     echo -e "  ${WHITE}tlauncher${NC}   - TLauncher Minecraft launcher"
     echo -e "  ${WHITE}dev-tools${NC}   - Development tools collection"
     echo -e "  ${WHITE}terminal-config${NC} - Advanced terminal configuration"
-    echo -e "  ${CYAN}docker${NC}      - Docker containers (coming soon)"
+    echo -e "  ${WHITE}docker${NC}      - Docker Desktop with containers"
     echo ""
     
     echo -e "${CYAN}Usage: ${WHITE}upack install <package>${NC}"
@@ -477,6 +480,31 @@ update_packages() {
             )
         else
             show_error "Could not fetch Obsidian version info"
+        fi
+    fi
+    
+    # Update Docker
+    if command_exists docker; then
+        show_step "Checking Docker updates..."
+        
+        # Docker updates through apt since it was installed via repository
+        echo "   Checking for Docker updates via apt repository..."
+        
+        # Update apt repository for Docker and check for updates
+        sudo apt update &>/dev/null
+        
+        # Check if docker packages can be upgraded
+        DOCKER_UPGRADES=$(apt list --upgradable 2>/dev/null | grep -E 'docker-ce|docker-desktop' | wc -l)
+        
+        if [[ "$DOCKER_UPGRADES" -gt 0 ]]; then
+            echo "   Found Docker updates available"
+            if sudo apt upgrade -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-desktop 2>/dev/null; then
+                show_success "Docker updated successfully"
+            else
+                show_success "Docker update completed (some packages may not be upgradable)"
+            fi
+        else
+            show_success "Docker is already up to date"
         fi
     fi
     

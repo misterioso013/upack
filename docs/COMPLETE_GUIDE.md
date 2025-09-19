@@ -316,9 +316,11 @@ glog  → git log --oneline --graph --decorate
 
 #### 🐳 Docker Shortcuts
 ```bash
-dc    → docker-compose
+dc    → docker compose (updated for new plugin)
 dps   → docker ps
 di    → docker images
+dexec → docker exec -it
+dlogs → docker logs
 ```
 
 #### 🐍 Python Shortcuts

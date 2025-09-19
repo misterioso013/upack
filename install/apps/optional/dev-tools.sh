@@ -308,7 +308,7 @@ alias gco='git checkout'
 alias glog='git log --oneline --graph --decorate'
 
 # Docker aliases
-alias dc='docker-compose'
+alias dc='docker compose'
 alias dps='docker ps'
 alias di='docker images'
 

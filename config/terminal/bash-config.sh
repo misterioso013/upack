@@ -307,6 +307,18 @@ alias autoclean='sudo apt autoclean'
 alias py='python3'
 alias pip='pip3'
 
+# Docker aliases (if docker is available)
+if command -v docker > /dev/null 2>&1; then
+    alias dc='docker compose'
+    alias dps='docker ps'
+    alias di='docker images'
+    alias dstop='docker stop'
+    alias dstart='docker start'
+    alias drestart='docker restart'
+    alias dexec='docker exec -it'
+    alias dlogs='docker logs'
+fi
+
 # Modern replacements (only if installed)
 # Prefer eza over exa (eza is the maintained fork)
 if command -v eza > /dev/null 2>&1; then

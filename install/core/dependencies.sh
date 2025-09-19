@@ -40,4 +40,19 @@ if ! sudo apt install -y \
     exit 1
 fi
 
+# Install gum for better CLI experience
+echo "📦 Installing gum for interactive CLI..."
+GUM_VERSION="0.16.0"
+if ! command -v gum &>/dev/null; then
+    (
+        cd /tmp
+        wget -qO gum.deb "https://github.com/charmbracelet/gum/releases/download/v${GUM_VERSION}/gum_${GUM_VERSION}_amd64.deb"
+        sudo apt-get install -y ./gum.deb
+        rm -f gum.deb
+    )
+    echo "✅ gum installed successfully"
+else
+    echo "✅ gum already installed"
+fi
+
 echo "✅ Essential dependencies installed successfully"

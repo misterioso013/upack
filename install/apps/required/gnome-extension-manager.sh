@@ -26,7 +26,7 @@ install_gnome_extension_manager() {
     
     # Check for Flatpak installation
     if command -v flatpak &> /dev/null; then
-        if flatpak list | grep -q "io.github.btelman.ExtensionManager" 2>/dev/null; then
+        if flatpak list 2>/dev/null | grep -q "io.github.btelman.ExtensionManager"; then
             log_success "GNOME Extension Manager is already installed via Flatpak"
             return 0
         fi

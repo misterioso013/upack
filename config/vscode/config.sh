@@ -12,8 +12,8 @@ if [ -f "$CONFIG_DIR/settings.json" ] && command -v code &>/dev/null; then
   exit 0
 fi
 
-# Remove Flatpak version if it exists
-if flatpak list | grep -q "com.visualstudio.code"; then
+# Remove Flatpak version if it exists (only if flatpak is installed)
+if command -v flatpak &>/dev/null && flatpak list 2>/dev/null | grep -q "com.visualstudio.code"; then
   echo "⚠️ Removing Flatpak version of VSCode..."
   flatpak uninstall -y com.visualstudio.code
 fi
@@ -30,15 +30,25 @@ fi
 
 echo "🧠 Configuring VSCode..."
 
-mkdir -p "$CONFIG_DIR"
-cp config/vscode/*.json "$CONFIG_DIR"
+# Get the script directory to find config files
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UPACK_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-if [ -f config/vscode/default-extensions.txt ]; then
+mkdir -p "$CONFIG_DIR"
+cp "$SCRIPT_DIR"/*.json "$CONFIG_DIR"
+
+if [ -f "$SCRIPT_DIR/default-extensions.txt" ]; then
   echo "Installing VSCode extensions..."
   while read -r extension; do
-    gum spin --spinner dot --title "Installing $extension..." -- bash -c \
-      "code --install-extension \"$extension\" --force"
-  done < config/vscode/default-extensions.txt
+    echo "📦 Installing extension: $extension..."
+    # Use gum for better UI if available, otherwise use simple output
+    if command -v gum &>/dev/null; then
+      gum spin --spinner dot --title "Installing $extension..." -- bash -c \
+        "code --install-extension \"$extension\" --force"
+    else
+      code --install-extension "$extension" --force
+    fi
+  done < "$SCRIPT_DIR/default-extensions.txt"
 
   echo "✅ Extensions installed."
 fi

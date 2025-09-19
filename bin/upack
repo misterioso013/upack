@@ -84,7 +84,7 @@ show_help() {
     echo ""
     echo -e "${YELLOW}MANAGEMENT:${NC}"
     echo -e "  ${WHITE}upack status${NC}              Show installed packages and languages"
-    echo -e "  ${WHITE}upack update${NC}              Update all managed packages"
+    echo -e "  ${WHITE}upack update${NC}              Update UPack and all managed packages"
     echo -e "  ${WHITE}upack list${NC}                List available packages"
     echo ""
     echo -e "${YELLOW}OPTIONS:${NC}"
@@ -338,6 +338,64 @@ update_packages() {
     show_cli_banner
     echo -e "${YELLOW}Updating managed packages...${NC}"
     echo ""
+    
+    # Update UPack itself if it's a git repository
+    if [[ -d "$UPACK_ROOT/.git" ]]; then
+        show_step "Updating UPack..."
+        
+        # Fetch latest changes first
+        if (cd "$UPACK_ROOT" && git fetch origin main 2>/dev/null); then
+            # Check if updates are available
+            LOCAL_COMMIT=$(cd "$UPACK_ROOT" && git rev-parse HEAD 2>/dev/null)
+            REMOTE_COMMIT=$(cd "$UPACK_ROOT" && git rev-parse origin/main 2>/dev/null)
+            
+            if [[ "$LOCAL_COMMIT" != "$REMOTE_COMMIT" ]]; then
+                echo "   📦 Updates available, pulling latest version..."
+                if (cd "$UPACK_ROOT" && git pull origin main 2>/dev/null); then
+                    show_success "UPack updated to latest version"
+                    
+                    # If this is a permanent installation, update the global CLI
+                    if [[ "$UPACK_ROOT" == "$HOME/.local/share/upack" ]]; then
+                        show_step "Updating global UPack CLI..."
+                        if [[ -f "$UPACK_ROOT/bin/upack" ]]; then
+                            cp "$UPACK_ROOT/bin/upack" "$HOME/.local/bin/upack" 2>/dev/null || true
+                            show_success "Global CLI updated"
+                        fi
+                    fi
+                else
+                    show_error "Failed to pull UPack updates"
+                fi
+            else
+                show_success "UPack is already up to date"
+            fi
+        else
+            show_error "Failed to fetch UPack updates (no internet connection?)"
+        fi
+        echo ""
+    elif [[ -d "$HOME/.local/share/upack" ]]; then
+        show_step "Checking UPack installation..."
+        echo "   ⚠️  UPack is installed but not as a git repository"
+        
+        # Check if we're running from a development git repo
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        DEV_ROOT=""
+        if [[ "$(basename "$SCRIPT_DIR")" == "bin" ]]; then
+            DEV_ROOT="$(dirname "$SCRIPT_DIR")"
+        else
+            DEV_ROOT="$SCRIPT_DIR"
+        fi
+        
+        if [[ -d "$DEV_ROOT/.git" ]] && [[ "$DEV_ROOT" != "$HOME/.local/share/upack" ]]; then
+            echo "   💡 Detected development git repository at: $DEV_ROOT"
+            echo -e "   🔄 To enable auto-updates, you can:"
+            echo -e "   ${CYAN}1. Run setup from git directory: cd $DEV_ROOT && ./setup.sh${NC}"
+            echo -e "   ${CYAN}2. Or manually clone: git clone https://github.com/misterioso013/upack.git && cd upack && ./setup.sh${NC}"
+        else
+            echo -e "   🔄 To enable auto-updates, reinstall with:"
+            echo -e "   ${CYAN}git clone https://github.com/misterioso013/upack.git && cd upack && ./setup.sh${NC}"
+        fi
+        echo ""
+    fi
     
     # Update Node.js via NVM
     if command_exists nvm && [ -d "$HOME/.nvm" ]; then

@@ -77,7 +77,7 @@ upack install discord obs-studio btop typora
 
 # System maintenance
 upack status    # Show what's installed
-upack update    # Update everything
+upack update    # Update UPack and all packages
 upack --help    # See all commands
 ```
 
@@ -145,6 +145,25 @@ upack list --available
 # Uninstall UPack completely
 upack-uninstall
 ```
+
+### 🔄 Auto-Updates
+UPack can automatically update itself when installed from git:
+
+```bash
+# Enable auto-updates by installing from git
+git clone https://github.com/misterioso013/upack.git
+cd upack && ./setup.sh
+
+# Now upack update will also update UPack itself
+upack update  # Updates UPack + all managed packages
+```
+
+**Auto-update features:**
+- ✅ **Checks for latest UPack version** from GitHub
+- ✅ **Smart update detection** - only pulls when needed  
+- ✅ **Preserves user settings** and configurations
+- ✅ **Updates global CLI** automatically after update
+- ✅ **Graceful fallback** if git/internet unavailable
 
 ### Keyboard Shortcuts
 After setup, you get productive hotkeys:

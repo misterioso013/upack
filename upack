@@ -110,9 +110,18 @@ install_app() {
         "typora")
             script_path="$UPACK_ROOT/install/apps/optional/typora.sh"
             ;;
+        "tlauncher")
+            script_path="$UPACK_ROOT/install/apps/optional/tlauncher.sh"
+            ;;
+        "dev-tools")
+            script_path="$UPACK_ROOT/install/apps/optional/dev-tools.sh"
+            ;;
+        "terminal-config")
+            script_path="$UPACK_ROOT/install/apps/optional/terminal-config.sh"
+            ;;
         *)
             show_error "Application '$app' not supported yet"
-            show_info "Available apps: discord, obs-studio, btop, typora"
+            show_info "Available apps: discord, obs-studio, btop, typora, tlauncher, dev-tools, terminal-config"
             return 1
             ;;
     esac
@@ -143,7 +152,7 @@ handle_install() {
     fi
     
     local languages=("node" "python" "rust" "java" "go")
-    local apps=("discord" "obs-studio" "obs" "btop" "docker" "typora")
+    local apps=("discord" "obs-studio" "obs" "btop" "docker" "typora" "tlauncher" "dev-tools" "terminal-config")
     
     for item in "${items[@]}"; do
         echo ""
@@ -250,6 +259,10 @@ list_packages() {
     echo -e "  ${WHITE}discord${NC}     - Discord messaging app"
     echo -e "  ${WHITE}obs-studio${NC}  - OBS Studio for streaming"
     echo -e "  ${WHITE}btop${NC}        - Modern system monitor"
+    echo -e "  ${WHITE}typora${NC}      - Typora Markdown editor"
+    echo -e "  ${WHITE}tlauncher${NC}   - TLauncher Minecraft launcher"
+    echo -e "  ${WHITE}dev-tools${NC}   - Development tools collection"
+    echo -e "  ${WHITE}terminal-config${NC} - Advanced terminal configuration"
     echo -e "  ${CYAN}docker${NC}      - Docker containers (coming soon)"
     echo ""
     

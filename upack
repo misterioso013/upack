@@ -346,6 +346,72 @@ update_packages() {
         show_success "Rust updated"
     fi
     
+    # Update VSCode
+    if command_exists code; then
+        show_step "Checking Visual Studio Code updates..."
+        # Get current version
+        CURRENT_VERSION=$(code --version | head -n1 2>/dev/null || echo "unknown")
+        echo "   Current version: $CURRENT_VERSION"
+        
+        # Check if we can get version info from Microsoft
+        echo "   Checking for latest version..."
+        
+        # Download and install latest version (VSCode doesn't have a simple API to check version)
+        (
+            cd /tmp
+            if wget -qO vscode-latest.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" 2>/dev/null; then
+                echo "   Downloaded latest VSCode package"
+                if sudo apt install -y ./vscode-latest.deb 2>/dev/null; then
+                    # Check if version actually changed
+                    NEW_VERSION=$(code --version | head -n1 2>/dev/null || echo "unknown")
+                    if [[ "$NEW_VERSION" != "$CURRENT_VERSION" ]]; then
+                        show_success "VSCode updated: $CURRENT_VERSION → $NEW_VERSION"
+                    else
+                        show_success "VSCode is already up to date ($CURRENT_VERSION)"
+                    fi
+                else
+                    show_error "Failed to install VSCode update"
+                fi
+                rm -f vscode-latest.deb
+            else
+                show_error "Failed to download VSCode update (no internet connection?)"
+            fi
+        )
+    fi
+    
+    # Update Obsidian
+    if command_exists obsidian; then
+        show_step "Checking Obsidian updates..."
+        
+        # Get latest version from GitHub API
+        LATEST_VERSION=$(curl -s https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/' 2>/dev/null)
+        
+        if [[ -n "$LATEST_VERSION" ]]; then
+            echo "   Latest version available: v$LATEST_VERSION"
+            
+            # Download and install latest version
+            (
+                cd /tmp
+                ARCH=$(dpkg --print-architecture)
+                OBSIDIAN_URL="https://github.com/obsidianmd/obsidian-releases/releases/download/v${LATEST_VERSION}/obsidian_${LATEST_VERSION}_${ARCH}.deb"
+                
+                if wget -qO obsidian-latest.deb "$OBSIDIAN_URL" 2>/dev/null; then
+                    echo "   Downloaded Obsidian v$LATEST_VERSION"
+                    if sudo apt install -y ./obsidian-latest.deb 2>/dev/null; then
+                        show_success "Obsidian updated to v$LATEST_VERSION"
+                    else
+                        show_error "Failed to install Obsidian update"
+                    fi
+                    rm -f obsidian-latest.deb
+                else
+                    show_error "Failed to download Obsidian update"
+                fi
+            )
+        else
+            show_error "Could not fetch Obsidian version info"
+        fi
+    fi
+    
     # Update system packages
     show_step "Updating system packages..."
     sudo apt update && sudo apt upgrade -y

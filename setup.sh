@@ -90,7 +90,7 @@ show_completion() {
     echo -e "${BLUE}${BOLD}🚀 Next steps:${NC}"
     echo -e "  ${WHITE}1. 🔄 Restart your system: ${CYAN}sudo reboot${NC}"
     echo -e "  ${WHITE}2. 🤖 Install languages: ${CYAN}upack install node python rust${NC}"
-    echo -e "  ${WHITE}3. 📱 Install apps: ${CYAN}upack install discord obs-studio${NC}"
+    echo -e "  ${WHITE}3. 📱 Install apps: ${CYAN}upack install discord obs-studio typora${NC}"
     echo -e "  ${WHITE}4. 📊 Check status: ${CYAN}upack status${NC}"
     echo ""
     echo -e "${YELLOW}📖 Documentation: ${CYAN}https://github.com/misterioso013/upack${NC}"

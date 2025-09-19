@@ -56,7 +56,8 @@ This automatically downloads and runs UPack from a temporary location.
 - **Google Chrome**: Modern web browser
 - **VS Code**: Code editor with extensions
 - **VLC**: Media player
-- **Xournal++**: Note-taking and PDF annotation
+- **Obsidian**: Modern note-taking and knowledge management
+- **Xournal++**: PDF annotation and note-taking
 - **GNOME Tweaks**: System customization
 - **And more**: All the tools you need for daily productivity
 
@@ -72,7 +73,7 @@ upack git ssh           # Setup GitHub SSH key only
 upack install node python rust
 
 # Install optional applications
-upack install discord obs-studio btop
+upack install discord obs-studio btop typora
 
 # System maintenance
 upack status    # Show what's installed
@@ -133,7 +134,7 @@ The setup is fully automated, but you can customize post-installation:
 upack status
 
 # Install specific applications
-upack install discord obs-studio
+upack install discord obs-studio typora
 
 # Update all installed packages
 upack update
@@ -158,6 +159,7 @@ After setup, you get productive hotkeys:
 ✅ **Google Chrome** - Modern web browser  
 ✅ **VS Code** - Code editor with extensions  
 ✅ **VLC Media Player** - Universal media player  
+✅ **Obsidian** - Modern note-taking and knowledge management  
 ✅ **Xournal++** - PDF annotation and note-taking  
 ✅ **GNOME Tweaks** - System customization tools  
 ✅ **Extension Manager** - Manage GNOME extensions  
@@ -187,6 +189,9 @@ upack install obs-studio   # Live streaming and recording
 # Development & System Tools  
 upack install btop         # Modern system monitor
 upack install docker       # Container platform
+
+# Productivity & Writing
+upack install typora       # Markdown editor with themes
 
 # Programming Languages
 upack install node         # Node.js via NVM

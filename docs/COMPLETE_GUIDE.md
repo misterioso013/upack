@@ -63,9 +63,9 @@ cd upack
 - Google Chrome
 - VS Code (with extensions and settings)
 - VLC Media Player
-- Xournal++ (note-taking)
+- Obsidian (modern note-taking and knowledge management)
+- Xournal++ (PDF annotation and note-taking)
 - SendAny (file sharing)
-- Typora (Markdown editor)
 - GNOME Tweaks + Extension Manager
 - WL-Clipboard (clipboard)
 - Zoxide (smart navigation)
@@ -74,6 +74,7 @@ cd upack
 - Discord
 - OBS Studio
 - btop (system monitor)
+- Typora (Markdown editor with themes)
 - TLauncher (Minecraft)
 - Advanced terminal configurations
 

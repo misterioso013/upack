@@ -22,7 +22,7 @@ ESSENTIAL_APPS=(
     "vlc"
     "gnome-tweaks"
     "gnome-extension-manager"
-    "typora"
+    "obsidian"
     "xournalpp"
     "wl-clipboard"
     "zoxide"

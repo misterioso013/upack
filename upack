@@ -45,6 +45,7 @@ show_help() {
     echo -e "  ${WHITE}upack install obs-studio${NC}  Install OBS Studio"
     echo -e "  ${WHITE}upack install docker${NC}      Install Docker (coming soon)"
     echo -e "  ${WHITE}upack install btop${NC}        Install system monitor"
+    echo -e "  ${WHITE}upack install typora${NC}      Install Typora (Markdown editor)"
     echo ""
     echo -e "${YELLOW}MANAGEMENT:${NC}"
     echo -e "  ${WHITE}upack status${NC}              Show installed packages and languages"
@@ -106,9 +107,12 @@ install_app() {
         "btop")
             script_path="$UPACK_ROOT/install/apps/optional/btop.sh"
             ;;
+        "typora")
+            script_path="$UPACK_ROOT/install/apps/optional/typora.sh"
+            ;;
         *)
             show_error "Application '$app' not supported yet"
-            show_info "Available apps: discord, obs-studio, btop"
+            show_info "Available apps: discord, obs-studio, btop, typora"
             return 1
             ;;
     esac
@@ -139,7 +143,7 @@ handle_install() {
     fi
     
     local languages=("node" "python" "rust" "java" "go")
-    local apps=("discord" "obs-studio" "obs" "btop" "docker")
+    local apps=("discord" "obs-studio" "obs" "btop" "docker" "typora")
     
     for item in "${items[@]}"; do
         echo ""

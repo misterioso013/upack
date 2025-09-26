@@ -34,20 +34,20 @@ install_dependencies() {
     show_step "Installing Android Studio dependencies..."
     
     sudo apt update
-    sudo apt install -y \
-        libc6:i386 \
-        libncurses5:i386 \
-        libstdc++6:i386 \
-        lib32z1 \
-        libbz2-1.0:i386 \
-        libxrender1 \
-        libxtst6 \
-        libxi6 \
-        libfreetype6 \
-        libxft2 \
-        wget \
-        unzip \
-        default-jdk
+    # sudo apt install -y \
+    #     libc6:i386 \
+    #     libncurses5:i386 \
+    #     libstdc++6:i386 \
+    #     lib32z1 \
+    #     libbz2-1.0:i386 \
+    #     libxrender1 \
+    #     libxtst6 \
+    #     libxi6 \
+    #     libfreetype6 \
+    #     libxft2 \
+    #     wget \
+    #     unzip \
+    #     default-jdk
 
     show_success "Dependencies installed"
 }

@@ -46,6 +46,8 @@ show_help() {
     echo -e "  ${WHITE}upack install docker${NC}      Install Docker Desktop"
     echo -e "  ${WHITE}upack install btop${NC}        Install system monitor"
     echo -e "  ${WHITE}upack install typora${NC}      Install Typora (Markdown editor)"
+    echo -e "  ${WHITE}upack install android-studio${NC} Install Android Studio"
+    echo -e "  ${WHITE}upack install react-native${NC}   Install React Native environment"
     echo ""
     echo -e "${YELLOW}MANAGEMENT:${NC}"
     echo -e "  ${WHITE}upack status${NC}              Show installed packages and languages"
@@ -122,9 +124,15 @@ install_app() {
         "docker")
             script_path="$UPACK_ROOT/install/apps/optional/docker.sh"
             ;;
+        "android-studio")
+            script_path="$UPACK_ROOT/install/apps/optional/android-studio.sh"
+            ;;
+        "react-native")
+            script_path="$UPACK_ROOT/install/apps/optional/react-native.sh"
+            ;;
         *)
             show_error "Application '$app' not supported yet"
-            show_info "Available apps: discord, obs-studio, btop, typora, tlauncher, dev-tools, terminal-config, docker"
+            show_info "Available apps: discord, obs-studio, btop, typora, tlauncher, dev-tools, terminal-config, docker, android-studio, react-native"
             return 1
             ;;
     esac
@@ -155,7 +163,7 @@ handle_install() {
     fi
     
     local languages=("node" "python" "rust" "java" "go")
-    local apps=("discord" "obs-studio" "obs" "btop" "docker" "typora" "tlauncher" "dev-tools" "terminal-config")
+    local apps=("discord" "obs-studio" "obs" "btop" "docker" "typora" "tlauncher" "dev-tools" "terminal-config" "android-studio" "react-native")
     
     for item in "${items[@]}"; do
         echo ""

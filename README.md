@@ -106,6 +106,43 @@ upack install btop      # Modern system monitor
 upack install docker    # Container platform
 ```
 
+### 📱 React Native Development
+Complete mobile development environment in one command:
+```bash
+upack install react-native  # Installs everything:
+                            # - Android Studio (latest version)
+                            # - Java JDK 17
+                            # - Android SDK & Build Tools
+                            # - Virtual Device (Pixel 4 emulator)
+                            # - React Native CLI
+                            # - All environment variables configured
+
+# Or install components separately
+upack install android-studio  # Just the Android Studio IDE
+upack install node           # Node.js if not already installed
+```
+
+**What you get:**
+- ✅ **Complete Android Studio** with SDK Manager and AVD Manager
+- ✅ **Android SDK Platform 35** with latest build tools
+- ✅ **Pre-configured emulator** ready to use
+- ✅ **Environment variables** automatically set up
+- ✅ **React Native CLI** globally installed
+- ✅ **Development tools** like Flipper and React DevTools
+
+**Quick start after installation:**
+```bash
+# Create new React Native project
+npx react-native@latest init MyApp
+cd MyApp
+
+# Run on Android (starts emulator automatically if needed)
+npx react-native run-android
+
+# Verify installation
+npx react-native doctor
+```
+
 Each language installer uses the community's preferred tool - no conflicts, no complexity.
 
 ## 🔧 System Requirements
@@ -208,6 +245,8 @@ upack install obs-studio   # Live streaming and recording
 # Development & System Tools  
 upack install btop         # Modern system monitor
 upack install docker       # Container platform
+upack install android-studio  # Complete Android development IDE
+upack install react-native    # Full React Native development environment
 
 # Productivity & Writing
 upack install typora       # Markdown editor with themes

@@ -76,6 +76,8 @@ cd upack
 - btop (system monitor)
 - Typora (Markdown editor with themes)
 - TLauncher (Minecraft)
+- Android Studio (complete IDE to develop Android apps)
+- React Native (complete environment for mobile development)
 - Advanced terminal configurations
 
 ### ⚙️ System Configurations
@@ -491,7 +493,185 @@ mise ls-remote python
 
 ---
 
-## 🛠️ Development Tools
+## � React Native Development
+
+UPack oferece uma configuração completa para desenvolvimento React Native, incluindo Android Studio e todas as dependências necessárias.
+
+### 🚀 Instalação Rápida
+
+```bash
+# Instalar ambiente completo do React Native
+upack install react-native
+
+# Ou instalar componentes separadamente
+upack install android-studio
+upack install node    # Se ainda não instalado
+```
+
+### 🛠️ O que é instalado
+
+#### 📦 Android Studio
+- **Versão**: Última versão estável (2025.1.3.7)
+- **Localização**: `$HOME/.local/opt/android-studio`
+- **Inclui**: IDE completa, Android SDK Manager, AVD Manager
+- **Dependências**: Java JDK 17, bibliotecas 32-bit necessárias
+
+#### 🤖 Android SDK
+- **SDK Platform**: Android 35 (mais recente)
+- **Build Tools**: 35.0.0
+- **Command Line Tools**: Última versão
+- **Emulator**: Sistema de imagens x86_64
+- **Platform Tools**: ADB, Fastboot
+
+#### 🌐 Node.js & React Native CLI
+- **Node.js**: Via NVM (sempre LTS)
+- **React Native CLI**: @react-native-community/cli
+- **Ferramentas extras**: Flipper, React DevTools
+
+### 🔧 Configuração Automática
+
+#### 📝 Variáveis de Ambiente
+Automaticamente configuradas em `~/.bashrc` e `~/.zshrc`:
+
+```bash
+# Java JDK
+export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+
+# Android SDK
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$PATH:$ANDROID_HOME/emulator"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+
+# Android Studio
+export ANDROID_STUDIO_HOME="$HOME/.local/opt/android-studio"
+export PATH="$PATH:$ANDROID_STUDIO_HOME/bin"
+```
+
+#### 📱 Emulador Virtual
+- **Nome**: ReactNative_AVD
+- **Dispositivo**: Pixel 4
+- **Sistema**: Android 35 com Google APIs
+- **Arquitetura**: x86_64 (mais rápido)
+
+### 🎯 Primeiros Passos
+
+#### 1. Verificar Instalação
+```bash
+# Verificar todas as dependências
+npx react-native doctor
+
+# Verificar dispositivos
+adb devices
+
+# Listar emuladores
+emulator -list-avds
+```
+
+#### 2. Criar Projeto
+```bash
+# Criar novo projeto
+npx react-native@latest init MeuApp
+cd MeuApp
+
+# Executar no Android
+npx react-native run-android
+```
+
+#### 3. Desenvolvimento
+```bash
+# Iniciar emulador
+emulator -avd ReactNative_AVD
+
+# Executar app (terminal separado)
+npx react-native run-android
+
+# Acessar menu de desenvolvimento
+# No emulador: Ctrl+M
+# No dispositivo: Balançar o dispositivo
+```
+
+### 🔍 Solução de Problemas
+
+#### ✅ Verificações Comuns
+```bash
+# Java instalado?
+java --version
+
+# Android SDK configurado?
+echo $ANDROID_HOME
+ls $ANDROID_HOME/platform-tools
+
+# Node.js atualizado?
+node --version  # Deve ser >= 18
+
+# React Native CLI instalado?
+npx react-native --version
+```
+
+#### 🐛 Problemas Frequentes
+
+**Erro: "SDK location not found"**
+```bash
+# Verificar variável ANDROID_HOME
+echo $ANDROID_HOME
+# Se vazia, reiniciar terminal ou executar:
+source ~/.bashrc
+```
+
+**Erro: "No connected devices"**
+```bash
+# Verificar emulador
+adb devices
+# Se vazio, iniciar emulador:
+emulator -avd ReactNative_AVD
+```
+
+**Erro de permissão USB (dispositivo físico)**
+```bash
+# Configurar regras udev (executado automaticamente)
+echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="22b8", MODE="0666", GROUP="plugdev"' | sudo tee /etc/udev/rules.d/51-android-usb.rules
+
+# Reiniciar udev
+sudo udevadm control --reload-rules
+```
+
+### 📚 Recursos Úteis
+
+#### 🔧 Comandos Essenciais
+```bash
+# Limpar cache
+npx react-native start --reset-cache
+
+# Build para release
+cd android && ./gradlew assembleRelease
+
+# Logs detalhados
+npx react-native run-android --verbose
+
+# Conectar dispositivo via ADB
+adb reverse tcp:8081 tcp:8081
+```
+
+#### 🎨 Ferramentas de Debug
+- **Flipper**: Debug visual (instalado automaticamente)
+- **React DevTools**: Inspeção de componentes
+- **Chrome DevTools**: Debug JavaScript
+- **Android Studio**: Logs nativos e profiling
+
+### 🌟 Próximos Passos
+
+Após configurar o ambiente, você pode:
+
+1. **Explorar a documentação oficial**: [React Native Docs](https://reactnative.dev)
+2. **Configurar IDE**: O VS Code já vem com extensões React Native
+3. **Aprender debugging**: Usar Flipper e Chrome DevTools
+4. **Testar em dispositivo real**: Configurar depuração USB
+5. **Deploy**: Preparar builds para Google Play Store
+
+---
+
+## �🛠️ Development Tools
 
 ### 📦 Script: `dev-tools.sh`
 

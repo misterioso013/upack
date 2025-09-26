@@ -39,6 +39,22 @@ upack config hotkeys     # Configure shortcuts
 upack backup            # Backup configurations
 ```
 
+### 📱 Quick Installs
+```bash
+# Languages
+upack install node python rust
+
+# Mobile Development
+upack install react-native      # Complete environment
+upack install android-studio    # Just the IDE
+
+# Applications
+upack install discord obs-studio btop typora docker
+
+# Multiple at once
+upack install node react-native discord
+```
+
 ---
 
 ## ⌨️ Keyboard Shortcuts

@@ -9,6 +9,8 @@ The idea is simple: format, clone, run, done. No menus, no questions, no reading
 Clone the repo and run the setup script:
 
 ```bash
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt install git curl wget
 git clone https://github.com/misterioso013/upack.git
 cd upack
 ./setup.sh
@@ -119,7 +121,7 @@ npx react-native run-android
 
 ## Requirements
 
-- Ubuntu 22.04 LTS or 24.04 LTS
+- Ubuntu 24.04 LTS or 25.10+
 - Internet connection
 - sudo privileges
 

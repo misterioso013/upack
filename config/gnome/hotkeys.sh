@@ -241,8 +241,8 @@ configure_system_shortcuts() {
     gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-up "['MonBrightnessUp']"
     gsettings set org.gnome.settings-daemon.plugins.media-keys screen-brightness-down "['MonBrightnessDown']"
     
-    # Screenshot UI: Print key (Fn+P on most keyboards)
-    gsettings set org.gnome.shell.keybindings show-screenshot-ui "['Print']"
+    # Screenshot UI: Super+Shift+S (works on all keyboards)
+    gsettings set org.gnome.shell.keybindings show-screenshot-ui "['<Super><Shift>s']"
     
     log_success "System shortcuts configured"
 }
@@ -284,7 +284,7 @@ show_hotkey_summary() {
     echo "  Super+L             → Lock screen"
     echo "  Ctrl+Alt+Delete     → Logout"
     echo "  Shift+F11           → Fullscreen"
-    echo "  Print (Fn+P)        → Screenshot UI"
+    echo "  Super+Shift+S       → Screenshot UI"
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""

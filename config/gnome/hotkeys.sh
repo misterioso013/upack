@@ -53,10 +53,13 @@ backup_current_settings() {
     local backup_dir="$HOME/.config/upack-backups/gnome-settings-$(date +%Y%m%d_%H%M%S)"
     mkdir -p "$backup_dir"
     
-    # Backup key settings
-    dconf dump /org/gnome/desktop/wm/keybindings/ > "$backup_dir/wm-keybindings.conf"
-    dconf dump /org/gnome/shell/keybindings/ > "$backup_dir/shell-keybindings.conf"
-    dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$backup_dir/media-keys.conf"
+    # Backup key settings (with timeout to prevent D-Bus hangs)
+    timeout 10 dconf dump /org/gnome/desktop/wm/keybindings/ > "$backup_dir/wm-keybindings.conf" 2>/dev/null \
+        || log_warning "Could not back up wm-keybindings (dconf timeout or unavailable)"
+    timeout 10 dconf dump /org/gnome/shell/keybindings/ > "$backup_dir/shell-keybindings.conf" 2>/dev/null \
+        || log_warning "Could not back up shell-keybindings (dconf timeout or unavailable)"
+    timeout 10 dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$backup_dir/media-keys.conf" 2>/dev/null \
+        || log_warning "Could not back up media-keys (dconf timeout or unavailable)"
     
     log_success "Settings backed up to: $backup_dir"
 }
@@ -307,33 +310,48 @@ reset_to_defaults() {
 
 # Main execution
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    echo "🎯 UPack GNOME Productivity Hotkeys"
-    echo "Configure keyboard shortcuts for maximum productivity"
-    echo ""
-    
-    # Check if running on GNOME
-    if [[ "$XDG_CURRENT_DESKTOP" != *"GNOME"* ]] && [[ "$DESKTOP_SESSION" != *"gnome"* ]]; then
-        log_warning "This script is designed for GNOME desktop environment"
-        echo "Current desktop: $XDG_CURRENT_DESKTOP"
-        echo ""
-        if ! gum confirm "Continue anyway?"; then
-            exit 0
-        fi
+    # Detect non-interactive mode: stdin is not a tty, or UPACK_SKIP_HOTKEYS is set
+    _interactive=true
+    if [[ ! -t 0 ]] || [[ "$UPACK_SKIP_HOTKEYS" == "1" ]]; then
+        _interactive=false
     fi
-    
-    # Show summary first
-    show_hotkey_summary
-    
-    if gum confirm "🎯 Configure these productivity hotkeys?"; then
-        configure_gnome_hotkeys
+
+    if [[ "$_interactive" == "true" ]]; then
+        echo "🎯 UPack GNOME Productivity Hotkeys"
+        echo "Configure keyboard shortcuts for maximum productivity"
         echo ""
-        echo "🎉 Hotkeys configured! Changes take effect immediately."
-        echo "💾 Settings backup saved to ~/.config/upack-backups/"
-        echo ""
-        if gum confirm "📋 Would you like to see the summary again?"; then
-            show_hotkey_summary
+
+        # Check if running on GNOME
+        if [[ "$XDG_CURRENT_DESKTOP" != *"GNOME"* ]] && [[ "$DESKTOP_SESSION" != *"gnome"* ]]; then
+            log_warning "This script is designed for GNOME desktop environment"
+            echo "Current desktop: $XDG_CURRENT_DESKTOP"
+            echo ""
+            if ! gum confirm "Continue anyway?"; then
+                exit 0
+            fi
+        fi
+
+        # Show summary first
+        show_hotkey_summary
+
+        if gum confirm "🎯 Configure these productivity hotkeys?"; then
+            configure_gnome_hotkeys
+            echo ""
+            echo "🎉 Hotkeys configured! Changes take effect immediately."
+            echo "💾 Settings backup saved to ~/.config/upack-backups/"
+            echo ""
+            if gum confirm "📋 Would you like to see the summary again?"; then
+                show_hotkey_summary
+            fi
+        else
+            echo "⏭️  Hotkey configuration skipped"
         fi
     else
-        echo "⏭️  Hotkey configuration skipped"
+        # Non-interactive mode: auto-configure hotkeys if GNOME is available
+        if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] || [[ "$DESKTOP_SESSION" == *"gnome"* ]]; then
+            configure_gnome_hotkeys
+        else
+            log_info "Skipping hotkeys setup (GNOME not detected in non-interactive mode)"
+        fi
     fi
 fi

@@ -1,409 +1,187 @@
-# 🚀 UPack - Ubuntu Productivity Pack
+# UPack
 
-**The simplest way to set up Ubuntu for productivity and development.**
+UPack is an automated setup and package manager for Ubuntu. It configures a complete development environment from scratch — theme, fonts, apps, terminal — and then gives you a CLI to keep managing things afterward.
 
-Transform your fresh Ubuntu installation into a beautiful, productive workspace in just one command. No menus, no decisions, no complexity - just automated perfection.
+The idea is simple: format, clone, run, done. No menus, no questions, no reading through a wiki before you can use your machine.
 
-## ⚡ Quick Start
+## Getting started
 
-### 🎯 One-Command Setup
+Clone the repo and run the setup script:
+
 ```bash
 git clone https://github.com/misterioso013/upack.git
 cd upack
 ./setup.sh
 ```
 
-### 🚀 Ultra-Simple Bootstrap (Even Easier!)
-For the absolute simplest experience, use our bootstrap script:
+Or, if you prefer a one-liner that downloads and runs everything from a temp directory:
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/misterioso013/upack/main/boot.sh | bash
 ```
-This automatically downloads and runs UPack from a temporary location.
 
-**That's it!** ☕ Grab a coffee and come back to a fully configured Ubuntu system in 10-15 minutes.
+The setup takes around 10-15 minutes. It installs apps, applies the theme, configures the terminal, and drops the `upack` CLI into your PATH. After that, the original folder can be deleted — the installation lives permanently under `~/.local/share/upack/`.
 
-## 📸 Screenshots
+## What gets installed automatically
+
+When you run `./setup.sh`, UPack sets up the following without asking for input:
+
+**Applications**
+- Google Chrome
+- VS Code
+- VLC
+- Obsidian
+- Xournal++
+- GNOME Tweaks and Extension Manager
+
+**Desktop configuration**
+- WhiteSur theme (macOS-inspired, works well on GNOME)
+- SF Pro Display fonts
+- GNOME extensions for dock and workspace management
+- Custom keyboard shortcuts (`Super+T` for terminal, `Super+E` for files, etc.)
+- Terminal with custom colors and prompt
+
+**UPack infrastructure**
+- `upack` CLI globally accessible from any directory
+- Desktop launcher for the UPack manager GUI
+- `upack-uninstall` for clean removal
+
+## Screenshots
 
 <table>
 <tr>
 <td align="center">
-<strong>🖥️ Beautiful Desktop</strong><br/>
+<strong>Desktop</strong><br/>
 <img src="docs/Screenshots/desktop-overview.png" width="300px" alt="UPack Desktop Overview"/>
 <br/>WhiteSur theme with GNOME extensions
 </td>
 <td align="center">
-<strong>📱 Applications Menu</strong><br/>
+<strong>Applications menu</strong><br/>
 <img src="docs/Screenshots/applications-menu.png" width="300px" alt="Applications Menu"/>
 <br/>All essential apps pre-installed
 </td>
 <td align="center">
-<strong>💻 Terminal Setup</strong><br/>
+<strong>Terminal</strong><br/>
 <img src="docs/Screenshots/terminal-setup.png" width="300px" alt="Terminal Setup"/>
 <br/>Customized bash with colors and fonts
 </td>
 </tr>
 </table>
 
-## ✨ What You Get
+## The CLI
 
-### 🎨 Beautiful Desktop
-- **WhiteSur Theme**: Elegant macOS-inspired design
-- **GNOME Extensions**: Curated productivity extensions
-- **Custom Hotkeys**: Keyboard-driven workflow
-- **Modern Terminal**: Customized bash with colors and fonts
-
-### 📦 Essential Applications
-- **Google Chrome**: Modern web browser
-- **VS Code**: Code editor with extensions
-- **VLC**: Media player
-- **Obsidian**: Modern note-taking and knowledge management
-- **Xournal++**: PDF annotation and note-taking
-- **GNOME Tweaks**: System customization
-- **And more**: All the tools you need for daily productivity
-
-### 🤖 Smart CLI Management
-After setup, manage your system with the intelligent UPack CLI:
-```bash
-# Development setup
-upack git               # Complete Git & GitHub SSH setup
-upack git config        # Configure Git user settings only
-upack git ssh           # Setup GitHub SSH key only
-
-# Install development languages
-upack install node python rust
-
-# Install optional applications
-upack install discord obs-studio btop typora
-
-# System maintenance
-upack status    # Show what's installed
-upack update    # Update UPack and all packages
-upack --help    # See all commands
-```
-
-## � Development Tools Integration
-
-### Git & GitHub Setup
-UPack makes development setup effortless:
-```bash
-upack git               # One command configures everything:
-                        # - Git user name and email
-                        # - SSH key generation
-                        # - GitHub SSH key setup
-                        # - Connection testing
-```
-
-### Programming Languages (via CLI)
-```bash
-upack install node     # Node.js via NVM (industry standard)
-upack install python   # Python via system/pyenv
-upack install rust     # Rust via rustup (official installer)
-```
-
-### Development Tools
-```bash
-upack install btop      # Modern system monitor
-upack install docker    # Container platform
-```
-
-### 📱 React Native Development
-Complete mobile development environment in one command:
-```bash
-upack install react-native  # Installs everything:
-                            # - Android Studio (latest version)
-                            # - Java JDK 17
-                            # - Android SDK & Build Tools
-                            # - Virtual Device (Pixel 4 emulator)
-                            # - React Native CLI
-                            # - All environment variables configured
-
-# Or install components separately
-upack install android-studio  # Just the Android Studio IDE
-upack install node           # Node.js if not already installed
-```
-
-**What you get:**
-- ✅ **Complete Android Studio** with SDK Manager and AVD Manager
-- ✅ **Android SDK Platform 35** with latest build tools
-- ✅ **Pre-configured emulator** ready to use
-- ✅ **Environment variables** automatically set up
-- ✅ **React Native CLI** globally installed
-- ✅ **Development tools** like Flipper and React DevTools
-
-**Quick start after installation:**
-```bash
-# Create new React Native project
-npx react-native@latest init MyApp
-cd MyApp
-
-# Run on Android (starts emulator automatically if needed)
-npx react-native run-android
-
-# Verify installation
-npx react-native doctor
-```
-
-Each language installer uses the community's preferred tool - no conflicts, no complexity.
-
-## 🔧 System Requirements
-
-- **Ubuntu 22.04 LTS** or **24.04 LTS**
-- **Internet connection** for downloads
-- **sudo privileges** for system package installation
-
-## 🎯 Philosophy
-
-UPack follows the **"Format → Clone → Run → Done"** philosophy:
-
-1. **No interactive menus** during initial setup
-2. **Zero decisions required** - smart defaults for everything  
-3. **Development tools installed separately** via CLI when needed
-4. **Permanent installation** - works even if you delete the original folder
-5. **Clean uninstall** capability with `upack-uninstall`
-
-## 🚀 Advanced Usage
-
-### Custom Installation
-The setup is fully automated, but you can customize post-installation:
+After setup, `upack` is the tool you use to install languages, apps, and configure development tools. It picks the right installer for each thing so you don't end up with conflicting package managers.
 
 ```bash
-# Check system status
+# Check what's installed
 upack status
 
-# Install specific applications
-upack install discord obs-studio typora
+# Install languages
+upack install node        # Node.js via NVM
+upack install python      # Python (system + optional pyenv)
+upack install rust        # Rust via rustup
 
-# Update all installed packages
-upack update
+# Install apps
+upack install discord
+upack install obs-studio
+upack install btop
+upack install docker
+upack install typora
+upack install android-studio
 
-# List available packages
-upack list --available
+# React Native (installs Android Studio, JDK 17, SDK, emulator, and CLI)
+upack install react-native
 
-# Uninstall UPack completely
-upack-uninstall
+# Git and GitHub SSH setup
+upack git                 # Configures name, email, SSH key, and tests the connection
+upack git config          # Only the Git user settings
+upack git ssh             # Only the SSH key
+
+# Keep things updated
+upack update              # Updates UPack itself and managed packages
+
+# See everything available
+upack --help
+upack list
 ```
 
-### 🔄 Auto-Updates
-UPack can automatically update itself when installed from git:
+### React Native in one command
+
+`upack install react-native` sets up the full Android development environment: Android Studio, Java JDK 17, Android SDK Platform 35, a pre-configured Pixel 4 emulator, and React Native CLI. Environment variables are configured automatically.
+
+After installation:
 
 ```bash
-# Enable auto-updates by installing from git
-git clone https://github.com/misterioso013/upack.git
-cd upack && ./setup.sh
-
-# Now upack update will also update UPack itself
-upack update  # Updates UPack + all managed packages
+npx react-native@latest init MyApp
+cd MyApp
+npx react-native run-android
 ```
 
-**Auto-update features:**
-- ✅ **Checks for latest UPack version** from GitHub
-- ✅ **Smart update detection** - only pulls when needed  
-- ✅ **Preserves user settings** and configurations
-- ✅ **Updates global CLI** automatically after update
-- ✅ **Graceful fallback** if git/internet unavailable
+## Requirements
 
-### Keyboard Shortcuts
-After setup, you get productive hotkeys:
-- `Super + /` - Quick reference for all hotkeys
-- `Super + T` - Open terminal  
-- `Super + E` - File manager
-- `Super + 1-9` - Switch between applications
+- Ubuntu 22.04 LTS or 24.04 LTS
+- Internet connection
+- sudo privileges
 
-## �️ What's Installed Automatically
-
-### Essential Applications
-✅ **Google Chrome** - Modern web browser  
-✅ **VS Code** - Code editor with extensions  
-✅ **VLC Media Player** - Universal media player  
-✅ **Obsidian** - Modern note-taking and knowledge management  
-✅ **Xournal++** - PDF annotation and note-taking  
-✅ **GNOME Tweaks** - System customization tools  
-✅ **Extension Manager** - Manage GNOME extensions  
-
-### System Configuration  
-✅ **WhiteSur Theme** - Beautiful macOS-inspired design  
-✅ **SF Pro Display Fonts** - Apple's system fonts  
-✅ **GNOME Extensions** - Dock, workspace management  
-✅ **Custom Hotkeys** - Productivity keyboard shortcuts  
-✅ **Terminal Customization** - Colors, prompts, and themes  
-
-### UPack Infrastructure
-✅ **UPack CLI** - Intelligent package management  
-✅ **Desktop Applications** - GUI launcher and file sharing  
-✅ **Permanent Installation** - Survives folder deletion  
-✅ **Global Access** - Commands work from anywhere  
-
-## 📱 Optional Applications (Install Later)
-
-Use the UPack CLI to install additional software as needed:
-
-```bash
-# Entertainment & Communication
-upack install discord      # Voice/video chat for gamers
-upack install obs-studio   # Live streaming and recording
-
-# Development & System Tools  
-upack install btop         # Modern system monitor
-upack install docker       # Container platform
-upack install android-studio  # Complete Android development IDE
-upack install react-native    # Full React Native development environment
-
-# Productivity & Writing
-upack install typora       # Markdown editor with themes
-
-# Programming Languages
-upack install node         # Node.js via NVM
-upack install python       # Python with package management
-upack install rust         # Rust programming language
-```
-
-## 🏗️ Project Structure
-
-The automated setup installs everything to permanent locations:
+## Project structure
 
 ```
-~/.local/share/upack/       # Main UPack installation
+~/.local/share/upack/       # Main installation directory
 ├── assets/                 # Icons, fonts, wallpapers
-├── config/                 # GNOME, terminal, app configs  
+├── config/                 # GNOME, terminal, and app configs
 ├── install/                # Installation scripts
 └── utils/                  # Utility functions
 
-~/.local/bin/               # CLI tools (in your PATH)
-├── upack                   # Main CLI interface
-├── upack-tui              # Terminal UI
-└── upack-uninstall        # Complete removal tool
-
-~/.local/share/applications/ # Desktop entries
-├── upack-manager.desktop   # UPack Manager GUI
-└── sendany.desktop         # File sharing app
+~/.local/bin/               # CLI tools (added to PATH automatically)
+├── upack                   # Main CLI
+├── upack-tui               # Terminal UI
+└── upack-uninstall         # Full removal tool
 ```
 
-## 🛠️ Development & Contributing
+## Troubleshooting
 
-### Development Setup
+**`upack` command not found after setup:**
 ```bash
-# Clone for development
-git clone https://github.com/misterioso013/upack.git
-cd upack
-
-# The CLI automatically detects development vs installed mode
-./bin/upack --help    # Run from source during development
-```
-
-### Contributing
-1. Fork the repository on GitHub
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes and test thoroughly
-4. Commit with clear messages: `git commit -m "Add amazing feature"`
-5. Push and create a Pull Request
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**UPack command not found:**
-```bash
-# Add to PATH manually if needed
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-**Desktop applications missing icons:**
+**Starting over:**
 ```bash
-# Icons are automatically installed to permanent location
-ls ~/.local/share/upack/assets/icons/
-```
-
-**Want to start over completely:**
-```bash
-# Complete removal
 upack-uninstall
-
-# Then reinstall
 git clone https://github.com/misterioso013/upack.git
 cd upack && ./setup.sh
 ```
 
-### Getting Help
-- **Quick status check**: `upack status`
-- **List all commands**: `upack --help`
-- **Check installation**: `ls ~/.local/share/upack/`
-- **View installed apps**: `upack list --installed`
+## Contributing
 
-## 🎉 What Makes UPack Different
+Contributions are welcome. Check the [Contributing Guide](CONTRIBUTING.md) for details on how to get started, or use the issue templates below:
 
-### ✅ True Automation
-- **No menus or dialogs** during setup
-- **Smart defaults** for everything
-- **Zero user decisions** required
+- [Report a bug](https://github.com/misterioso013/upack/issues/new?template=bug_report.yml)
+- [Request a feature](https://github.com/misterioso013/upack/issues/new?template=feature_request.yml)
+- [Documentation issue](https://github.com/misterioso013/upack/issues/new?template=documentation.yml)
+- [Ask a question](https://github.com/misterioso013/upack/issues/new?template=question.yml)
 
-### ✅ Permanent Installation  
-- **Survives folder deletion** - works even after removing the original clone
-- **Global CLI access** - commands work from any directory
-- **Clean uninstall** - complete removal in one command
+## Documentation
 
-### ✅ Intelligent Package Management
-- **Best practices** - each language uses its preferred installer
-- **Conflict-free** - no duplicate package managers
-- **Community standards** - NVM for Node, rustup for Rust, etc.
+- [Complete Guide](docs/COMPLETE_GUIDE.md) — detailed documentation with examples and tutorials
+- [Quick Reference](docs/QUICK_REFERENCE.md) — essential commands and shortcuts for daily use
+- [Changelog](CHANGELOG.md) — version history and release notes
 
-### ✅ Professional Quality
-- **Robust error handling** - graceful failure with helpful messages
-- **Permanent infrastructure** - proper system integration
-- **Modern interface** - beautiful CLI with colors and clear output
+## License
 
-## 📄 License
+MIT. See [LICENSE](LICENSE) for details.
 
-This project is open source and available under the [MIT License](LICENSE).
+## Acknowledgments
 
-## 🙏 Acknowledgments
-
-- Inspired by [Omakub](https://omakub.org) by DHH
-- [WhiteSur Theme](https://github.com/vinceliuice/WhiteSur-gtk-theme) by vinceliuice  
-- [Nord Color Scheme](https://github.com/arcticicestudio/nord) by Arctic Ice Studio
-- Ubuntu and GNOME communities
-
----
-
-## 🚀 Ready to Transform Your Ubuntu?
-
-```bash
-git clone https://github.com/misterioso013/upack.git
-cd upack
-./setup.sh
-```
-
-**Just one command. Zero complexity. Maximum productivity.** ☕
-
-## 🤝 Contributing
-
-We welcome contributions from the community! Whether you want to:
-
-- 🐛 **Report bugs** or suggest improvements
-- ✨ **Add new features** or applications  
-- 📚 **Improve documentation**
-- 🧪 **Help with testing**
-
-Check out our **[Contributing Guide](CONTRIBUTING.md)** for detailed information on how to get started.
-
-### Quick Links
-- **[🐛 Report a Bug](https://github.com/misterioso013/upack/issues/new?template=bug_report.yml)**
-- **[✨ Request a Feature](https://github.com/misterioso013/upack/issues/new?template=feature_request.yml)**
-- **[📚 Documentation Issue](https://github.com/misterioso013/upack/issues/new?template=documentation.yml)**
-- **[❓ Ask a Question](https://github.com/misterioso013/upack/issues/new?template=question.yml)**
-
-## 📚 Documentation
-
-- **[📖 Complete Guide](docs/COMPLETE_GUIDE.md)** - Detailed documentation with examples and tutorials
-- **[⚡ Quick Reference](docs/QUICK_REFERENCE.md)** - Essential commands and shortcuts for daily use  
-- **[📋 Changelog](CHANGELOG.md)** - Version history and release notes
+Inspired by [Omakub](https://omakub.org) by DHH. Uses the [WhiteSur Theme](https://github.com/vinceliuice/WhiteSur-gtk-theme) by vinceliuice and the [Nord Color Scheme](https://github.com/arcticicestudio/nord) by Arctic Ice Studio.
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for the Ubuntu community**
+Made with ❤️ for the Ubuntu community
 
-[⭐ Star this repo](https://github.com/misterioso013/upack) • [🐛 Report bugs](https://github.com/misterioso013/upack/issues) • [💡 Request features](https://github.com/misterioso013/upack/discussions)
+[Star this repo](https://github.com/misterioso013/upack) · [Report bugs](https://github.com/misterioso013/upack/issues) · [Request features](https://github.com/misterioso013/upack/discussions)
 
 </div>

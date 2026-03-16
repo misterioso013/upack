@@ -78,6 +78,14 @@ show_help() {
     echo -e "  ${WHITE}upack install typora${NC}      Install Typora (Markdown editor)"
     echo -e "  ${WHITE}upack install android-studio${NC} Install Android Studio"
     echo -e "  ${WHITE}upack install react-native${NC}   Install React Native environment"
+    echo -e "  ${WHITE}upack install fastfetch${NC}   Install system info display"
+    echo -e "  ${WHITE}upack install lazygit${NC}     Install terminal UI for Git"
+    echo -e "  ${WHITE}upack install lazydocker${NC}  Install terminal UI for Docker"
+    echo -e "  ${WHITE}upack install neovim${NC}      Install Neovim + LazyVim config"
+    echo -e "  ${WHITE}upack install github-cli${NC}  Install GitHub CLI (gh)"
+    echo -e "  ${WHITE}upack install flameshot${NC}   Install advanced screenshot tool"
+    echo -e "  ${WHITE}upack install localsend${NC}   Install local network file sharing"
+    echo -e "  ${WHITE}upack install ollama${NC}      Install local LLM runner"
     echo ""
     echo -e "${YELLOW}DEVELOPMENT:${NC}"
     echo -e "  ${WHITE}upack git${NC}                 Configure Git and GitHub SSH"
@@ -166,9 +174,33 @@ install_app() {
         "react-native")
             script_path="$UPACK_ROOT/install/apps/optional/react-native.sh"
             ;;
+        "fastfetch")
+            script_path="$UPACK_ROOT/install/apps/optional/fastfetch.sh"
+            ;;
+        "lazygit")
+            script_path="$UPACK_ROOT/install/apps/optional/lazygit.sh"
+            ;;
+        "lazydocker")
+            script_path="$UPACK_ROOT/install/apps/optional/lazydocker.sh"
+            ;;
+        "neovim"|"nvim")
+            script_path="$UPACK_ROOT/install/apps/optional/neovim.sh"
+            ;;
+        "github-cli"|"gh")
+            script_path="$UPACK_ROOT/install/apps/optional/github-cli.sh"
+            ;;
+        "flameshot")
+            script_path="$UPACK_ROOT/install/apps/optional/flameshot.sh"
+            ;;
+        "localsend")
+            script_path="$UPACK_ROOT/install/apps/optional/localsend.sh"
+            ;;
+        "ollama")
+            script_path="$UPACK_ROOT/install/apps/optional/ollama.sh"
+            ;;
         *)
             show_error "Application '$app' not supported yet"
-            show_info "Available apps: discord, obs-studio, btop, typora, tlauncher, dev-tools, terminal-config, docker, android-studio, react-native"
+            show_info "Available apps: discord, obs-studio, btop, typora, tlauncher, dev-tools, terminal-config, docker, android-studio, react-native, fastfetch, lazygit, lazydocker, neovim, github-cli, flameshot, localsend, ollama"
             return 1
             ;;
     esac
@@ -199,7 +231,7 @@ handle_install() {
     fi
     
     local languages=("node" "python" "rust" "java" "go")
-    local apps=("discord" "obs-studio" "obs" "btop" "docker" "typora" "tlauncher" "dev-tools" "terminal-config" "android-studio" "react-native")
+    local apps=("discord" "obs-studio" "obs" "btop" "docker" "typora" "tlauncher" "dev-tools" "terminal-config" "android-studio" "react-native" "fastfetch" "lazygit" "lazydocker" "neovim" "nvim" "github-cli" "gh" "flameshot" "localsend" "ollama")
     
     for item in "${items[@]}"; do
         echo ""
@@ -311,7 +343,64 @@ show_status() {
     else
         echo -e "  ${RED}❌ System Monitor${NC} not installed"
     fi
-    
+
+    # fastfetch
+    if command_exists fastfetch; then
+        echo -e "  ${GREEN}✅ fastfetch${NC}"
+    else
+        echo -e "  ${RED}❌ fastfetch${NC} not installed"
+    fi
+
+    # lazygit
+    if command_exists lazygit; then
+        echo -e "  ${GREEN}✅ lazygit${NC}"
+    else
+        echo -e "  ${RED}❌ lazygit${NC} not installed"
+    fi
+
+    # lazydocker
+    if command_exists lazydocker; then
+        echo -e "  ${GREEN}✅ lazydocker${NC}"
+    else
+        echo -e "  ${RED}❌ lazydocker${NC} not installed"
+    fi
+
+    # Neovim
+    if command_exists nvim; then
+        local nvim_version=$(nvim --version 2>/dev/null | head -1 | cut -d' ' -f2 || echo "unknown")
+        echo -e "  ${GREEN}✅ Neovim${NC} $nvim_version"
+    else
+        echo -e "  ${RED}❌ Neovim${NC} not installed"
+    fi
+
+    # GitHub CLI
+    if command_exists gh; then
+        echo -e "  ${GREEN}✅ GitHub CLI${NC}"
+    else
+        echo -e "  ${RED}❌ GitHub CLI${NC} not installed"
+    fi
+
+    # Flameshot
+    if command_exists flameshot; then
+        echo -e "  ${GREEN}✅ Flameshot${NC}"
+    else
+        echo -e "  ${RED}❌ Flameshot${NC} not installed"
+    fi
+
+    # LocalSend
+    if command_exists localsend || dpkg -l localsend &>/dev/null 2>&1; then
+        echo -e "  ${GREEN}✅ LocalSend${NC}"
+    else
+        echo -e "  ${RED}❌ LocalSend${NC} not installed"
+    fi
+
+    # Ollama
+    if command_exists ollama; then
+        echo -e "  ${GREEN}✅ Ollama${NC}"
+    else
+        echo -e "  ${RED}❌ Ollama${NC} not installed"
+    fi
+
     echo ""
 }
 
@@ -338,6 +427,14 @@ list_packages() {
     echo -e "  ${WHITE}dev-tools${NC}   - Development tools collection"
     echo -e "  ${WHITE}terminal-config${NC} - Advanced terminal configuration"
     echo -e "  ${WHITE}docker${NC}      - Docker Desktop with containers"
+    echo -e "  ${WHITE}fastfetch${NC}   - Fast system information display"
+    echo -e "  ${WHITE}lazygit${NC}     - Terminal UI for Git"
+    echo -e "  ${WHITE}lazydocker${NC}  - Terminal UI for Docker"
+    echo -e "  ${WHITE}neovim${NC}      - Neovim editor with LazyVim config"
+    echo -e "  ${WHITE}github-cli${NC}  - GitHub CLI (gh)"
+    echo -e "  ${WHITE}flameshot${NC}   - Advanced screenshot tool"
+    echo -e "  ${WHITE}localsend${NC}   - Local network file sharing"
+    echo -e "  ${WHITE}ollama${NC}      - Run LLMs locally"
     echo ""
     
     echo -e "${CYAN}Usage: ${WHITE}upack install <package>${NC}"
